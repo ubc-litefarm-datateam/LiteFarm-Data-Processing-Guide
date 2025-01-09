@@ -18,7 +18,7 @@ jobs:
 
     - name: Install Dependencies
       run: |
-        pip install -r requirements.txt || echo "No requirements.txt found"
+        pip install -r requirements.txt || echo "No dependencies to install"
 
     - name: Render Quarto Site
       run: quarto render
@@ -28,4 +28,4 @@ jobs:
       with:
         personal_token: ${{ secrets.GH_TOKEN }}
         publish_dir: ./docs
-        exclude_assets: ".nojekyll"
+
