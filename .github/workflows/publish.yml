@@ -3,34 +3,28 @@ name: Deploy Quarto Documentation
 on:
   push:
     branches:
-      - main  # Triggers the workflow when changes are pushed to the main branch
+      - main
 
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Check out the repository
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+    - name: Checkout Repository
+      uses: actions/checkout@v3
 
-      # Step 2: Set up Quarto
-      - name: Set up Quarto
-        uses: quarto-dev/quarto-actions/setup@v2
+    - name: Set up Quarto
+      uses: quarto-dev/quarto-actions/setup@v2
 
-      # Step 3: Install Python dependencies (optional)
-      - name: Install Dependencies
-        run: |
-          pip install -r requirements.txt || echo "No requirements.txt found"
+    - name: Install Dependencies
+      run: |
+        pip install -r requirements.txt || echo "No requirements.txt found"
 
-      # Step 4: Render Quarto site
-      - name: Render Quarto Site
-        run: quarto render
+    - name: Render Quarto Site
+      run: quarto render
 
-      # Step 5: Deploy to GitHub Pages
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          personal_token: ${{ secrets.GH_TOKEN }}  # Use the PAT stored in GH_TOKEN
-          publish_dir: ./docs                   
-
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        personal_token: ${{ secrets.GH_TOKEN }}
+        publish_dir: ./docs
