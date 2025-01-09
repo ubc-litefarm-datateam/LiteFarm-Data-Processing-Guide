@@ -1,0 +1,56 @@
+# Filtering Out Invalid Farm Names (SQL)
+
+In the process of validating farm data, it's crucial to ensure that the dataset contains only genuine entries. A lot of the times, farmers and new users, make demo farms when testing the app. Invalid or placeholder farm names can skew analyses and lead to inaccurate conclusions. One effective strategy to enhance data quality is filtering out farms with names that are likely placeholders or test entries.
+
+## Rationale
+
+During data collection, especially in systems undergoing testing or user onboarding, it's common to encounter farm names that are not real. These may include default names, test entries, or placeholders like "Test Farm," "Demo," or "ABC." Including such entries in data analyses can distort results and insights.
+
+## Implementation Using SQL
+
+To remove farms with invalid names, We utilize the following SQL query. This query filters out entries where the `farm_name` contains any of the specified substrings indicative of a test or placeholder name.
+
+```sql
+WHERE LOWER(f.farm_name) LIKE '%fake%'
+   OR LOWER(f.farm_name) LIKE '%prueba%'
+   OR LOWER(f.farm_name) LIKE '%test%'
+   OR LOWER(f.farm_name) LIKE '%abc%'
+   OR LOWER(f.farm_name) LIKE '%123%'
+   OR LOWER(f.farm_name) LIKE '%hola%'
+   OR LOWER(f.farm_name) LIKE '%sample%'
+   OR LOWER(f.farm_name) LIKE '%demo%'
+   OR LOWER(f.farm_name) LIKE '%delete%'
+   OR LOWER(f.farm_name) LIKE '%none%'
+   OR LOWER(f.farm_name) LIKE '%dummy%'
+   OR LOWER(f.farm_name) LIKE '%wrong%'
+   OR LOWER(f.farm_name) LIKE '%not real%'
+   OR LOWER(f.farm_name) LIKE '%litefarm%'
+   OR LOWER(f.farm_name) LIKE 'ab'
+   OR LOWER(f.farm_name) LIKE '%n/a%'
+```
+
+### Explanation of Keywords
+
+- **fake, test, sample, demo, dummy, not real**: Commonly used in testing environments to denote non-real entries.
+- **prueba**: Spanish for "test," capturing non-English placeholder names.
+- **abc, 123, ab**: Generic placeholders often used when real data isn't available.
+- **hola**: Spanish for "hello," possibly used as a default or test entry.
+- **delete, none, n/a**: Entries that may have been marked for deletion or indicate missing data.
+- **wrong**: Indicates an incorrect or placeholder entry.
+- **litefarm**: Might be used as a default name within the system or during demonstrations.
+
+The `LOWER()` function ensures the query is case-insensitive, capturing variations like "Test" and "test."
+
+## Benefits of This Strategy
+
+- **Improved Data Quality**: Eliminates non-genuine entries, leading to more accurate analyses.
+- **Efficiency**: Reduces the noise in the dataset, making data processing and analysis more efficient.
+- **Reliability**: Enhances the trustworthiness of insights derived from the data.
+
+## Considerations
+
+While this strategy is effective, it's important to be mindful of potential false positives. For example, a legitimate farm named "ABC Ranch" would be excluded. Regularly reviewing and updating the list of filtered keywords can mitigate this risk.
+
+## Conclusion
+
+Filtering out invalid farm names is a simple yet powerful strategy to improve data validation. By implementing this SQL query, we ensure that our dataset reflects real-world entries, enhancing the overall quality and reliability of our analyses.

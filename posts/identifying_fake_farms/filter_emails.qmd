@@ -1,0 +1,47 @@
+# Filtering Out Farms Associated with Invalid Emails (SQL)
+
+In our ongoing efforts to validate farm data effectively, another crucial strategy is to filter out farms associated with invalid or non-genuine user emails. Specifically, we target emails containing the term "litefarm," which are typically used by backend users or staff members. Excluding these farms ensures that our dataset reflects real-world farming activities and enhances the accuracy of our analyses.
+
+## Rationale
+
+During the development and maintenance of the Litefarm platform, staff members and developers often create test accounts using emails that include "litefarm" in the address (e.g., `test@litefarm.com`). Farms associated with these accounts are usually not real and are created for testing or demonstration purposes. Including such farms in data analyses can lead to skewed results and misinformed conclusions.
+
+## Implementation Using SQL
+
+To filter out farms associated with invalid emails, we join the `users`, `userFarm`, and `farm` tables to identify and exclude farms linked to users with emails containing "litefarm." Below is the SQL query used to perform this filtering:
+
+```sql
+SELECT f.*
+FROM farm f
+JOIN "userFarm" uf ON f.farm_id = uf.farm_id
+JOIN users u ON uf.user_id = u.user_id
+WHERE LOWER(u.email) NOT LIKE '%litefarm%';
+```
+
+### Explanation
+
+- **Tables Involved**:
+  - `users`: Contains user information, including `email` and `user_id`.
+  - `userFarm`: Associates users with farms through `user_id` and `farm_id`.
+  - `farm`: Contains farm details identified by `farm_id`.
+
+- **Query Breakdown**:
+  - `SELECT f.*`: Selects all columns from the `farm` table.
+  - `JOIN "userFarm" uf ON f.farm_id = uf.farm_id`: Joins the `farm` and `userFarm` tables on `farm_id` to associate farms with users.
+  - `JOIN users u ON uf.user_id = u.user_id`: Joins the result with the `users` table on `user_id` to access user emails.
+  - `WHERE LOWER(u.email) NOT LIKE '%litefarm%'`: Filters out farms where the associated user's email contains "litefarm," making the search case-insensitive with `LOWER()`.
+
+## Benefits of This Strategy
+
+- **Enhanced Data Integrity**: Removes non-genuine farms associated with staff or test accounts.
+- **Accurate Analyses**: Ensures that statistical analyses and reports are based on real farming data.
+- **Resource Efficiency**: Reduces the time and resources spent processing irrelevant data.
+
+## Considerations
+
+- **Multiple Users per Farm**: A farm might be associated with multiple users. Ensure that the farm is only excluded if all associated users have emails containing "litefarm."
+- **False Positives**: Be cautious of legitimate users whose emails might inadvertently contain "litefarm."
+
+## Conclusion
+
+Filtering out farms associated with invalid emails is a vital step in maintaining the quality and reliability of our farm data. By implementing this SQL-based strategy, we can confidently proceed with analyses that reflect true farming practices and make informed decisions based on accurate data.

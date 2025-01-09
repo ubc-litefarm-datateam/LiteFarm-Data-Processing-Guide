@@ -1,0 +1,17 @@
+---
+title: Farm Validation Documentation
+format:
+  html:
+    toc: true
+    css: styles.css
+---
+
+# Welcome to Farm Validation Documentation
+
+This website provides detailed insights into the process of cleaning, validating, and analyzing farm-related data. Learn more about:
+- **Identifying Fake Farms**: Techniques to detect invalid or fake farm data.
+- **Outlier Detection and Removal**: Strategies to ensure clean and interpretable data for accurate results.
+
+Navigate through the sections to explore the methodologies and documentation for each step.
+
+[About This Project](about.qmd)

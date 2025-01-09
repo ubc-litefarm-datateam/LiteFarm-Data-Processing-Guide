@@ -1,0 +1,13 @@
+---
+title: About This Project
+---
+
+# About the Farm Validation Project
+
+The **Farm Validation Project** aims to:
+- Detect invalid or fake farms using advanced validation techniques.
+- Remove outliers to ensure unbiased and interpretable data visualizations.
+
+This project is part of our initiative to create reliable datasets for decision-making and analytics.
+
+For more information, visit the [GitHub repository](https://github.com/ubc-litefarm-datateam/LiteFarm-Data-Processing-Guide).
