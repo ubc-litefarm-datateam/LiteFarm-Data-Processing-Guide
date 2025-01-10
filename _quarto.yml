@@ -30,8 +30,7 @@ website:
 
 format:
   html:
-    theme:
-      light: cerulean
+    theme: cosmo
     css: styles.css
     toc: true
     toc-depth: 2
