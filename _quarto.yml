@@ -1,0 +1,42 @@
+project:
+  type: website
+  output-dir: docs   # <-- tell Quarto to place rendered files in docs/
+
+website:
+  title: "LiteFarm Data Processing Guide"
+  navbar:
+    left:
+      - text: "Home"
+        href: index.qmd
+      - text: "About"
+        href: about.qmd
+      - text: "Identifying Fake Farms"
+        menu:
+          - text: "Filter Emails"
+            href: posts/identifying_fake_farms/filter_emails.qmd
+          - text: "Filter Farm Names"
+            href: posts/identifying_fake_farms/filter_farm_names.qmd
+      - text: "Identifying Outliers"
+        menu:
+          - text: "Farm Centroid Outliers"
+            href: posts/identifying_outliers/farm_centroid_outliers.qmd
+          - text: "Farm on Land or Water Outlier"
+            href: posts/identifying_outliers/farm_on_land_or_water_outlier.qmd
+          - text: "Harvest Data Outlier"
+            href: posts/identifying_outliers/harvest_data_outlier.qmd
+    right:
+      - icon: github
+        href: "https://github.com/ubc-litefarm-datateam/LiteFarm-Data-Processing-Guide"
+
+format:
+  html:
+    theme:
+      light: cerulean
+    css: styles.css
+    toc: true
+    toc-depth: 2
+
+editor: visual
+
+execute:
+  freeze: auto

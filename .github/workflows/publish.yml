@@ -10,22 +10,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
-    - name: Set up Quarto
-      uses: quarto-dev/quarto-actions/setup@v2
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
 
-    - name: Install Dependencies
-      run: |
-        pip install -r requirements.txt || echo "No dependencies to install"
+      - name: Install Dependencies
+        run: |
+          # Only run pip install if requirements.txt is present
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          else
+            echo "No Python dependencies to install."
+          fi
 
-    - name: Render Quarto Site
-      run: quarto render
+      - name: Render Quarto Site
+        run: quarto render
 
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        personal_token: ${{ secrets.GH_TOKEN }}
-        publish_dir: ./docs
-
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          personal_token: ${{ secrets.GH_TOKEN }}
+          publish_dir: ./docs
+          publish_branch: gh-pages
