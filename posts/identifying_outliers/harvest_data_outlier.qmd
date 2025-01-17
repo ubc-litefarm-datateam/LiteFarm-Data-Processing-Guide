@@ -1,24 +1,20 @@
-Here's an expanded version of the documentation that includes all manual values and methods for each type of visualization, broken down by **location type** and **crop group**:
-
----
-
 # Identifying and Managing Outliers in Harvest Data for Improved Analysis
 
 This strategy focuses on identifying and handling outliers in the harvest dataset to ensure the accuracy and interpretability of the analysis. By detecting and managing extreme data points, we can produce visualizations and insights that are both meaningful and easy to understand.
 
----
+------------------------------------------------------------------------
 
 ## Rationale
 
 Outliers in the dataset, whether they are abnormally large or small values, can skew the results and obscure meaningful trends. These outliers may result from:
 
-- Data entry errors.
-- Unusual farming conditions.
-- Inconsistent definitions of farm areas or crop yields.
+-   Data entry errors.
+-   Unusual farming conditions.
+-   Inconsistent definitions of farm areas or crop yields.
 
 To address these challenges, we implemented a structured approach to detect and handle outliers in the harvest dataset. This process enables us to clean the data and produce insightful and accurate visualizations that highlight key trends in agricultural yields.
 
----
+------------------------------------------------------------------------
 
 ## Implementation Strategy
 
@@ -26,112 +22,107 @@ To address these challenges, we implemented a structured approach to detect and 
 
 We utilized the following key columns from the harvest dataset:
 
-- **`actual_quantity`**: The actual yield from each farm location.
-- **`location_area_ha`**: The area of the location in hectares.
-- **`type`**: The type of location (e.g., field, garden, greenhouse).
-- **`crop_group`**: The broader category of the crop (e.g., Vegetables and melons, Cereals).
-- **`farm_id`**: The unique identifier for each farm.
+-   **`actual_quantity`**: The actual yield from each farm location.
+-   **`location_area_ha`**: The area of the location in hectares.
+-   **`type`**: The type of location (e.g., field, garden, greenhouse).
+-   **`crop_group`**: The broader category of the crop (e.g., Vegetables and melons, Cereals).
+-   **`farm_id`**: The unique identifier for each farm.
 
----
+------------------------------------------------------------------------
 
 ### Steps
 
 #### 1. Initial Cleaning:
-   - Remove rows with missing values in critical columns (`actual_quantity`, `location_area_ha`) to ensure the dataset is complete.
+
+-   Remove rows with missing values in critical columns (`actual_quantity`, `location_area_ha`) to ensure the dataset is complete.
 
 #### 2. Calculate Yield per Hectare:
-   - Add a derived column, `yield_per_ha`, to calculate productivity using the formula:
-     \[
-     \text{Yield per Hectare} = \frac{\text{Actual Quantity}}{\text{Location Area (ha)}}
-     \]
+
+-   Add a derived column, `yield_per_ha`, to calculate productivity using the formula: \[ \text{Yield per Hectare} = \frac{\text{Actual Quantity}}{\text{Location Area (ha)}} \]
 
 #### 3. Initial Outlier Detection Using IQR:
-   - Compute the Interquartile Range (IQR) for `actual_quantity` within each `crop_group`:
-     \[
-     \text{IQR} = Q3 - Q1
-     \]
-   - Define lower and upper bounds:
-     \[
-     \text{Lower Bound} = Q1 - 1.5 \times \text{IQR}
-     \]
-     \[
-     \text{Upper Bound} = Q3 + 1.5 \times \text{IQR}
-     \]
-   - Remove data points outside these bounds.
+
+-   Compute the Interquartile Range (IQR) for `actual_quantity` within each `crop_group`: \[ \text{IQR} = Q3 - Q1 \]
+-   Define lower and upper bounds: \[ \text{Lower Bound} = Q1 - 1.5 \times \text{IQR} \] \[ \text{Upper Bound} = Q3 + 1.5 \times \text{IQR} \]
+-   Remove data points outside these bounds.
 
 #### 4. Manual Modifications:
-   - Apply domain-specific thresholds for further outlier detection, as detailed below:
+
+-   Apply domain-specific thresholds for further outlier detection, as detailed below:
 
 ##### **Per Location Type**:
-- **Field**:
-  - Locations with `location_area_ha >= 160` or `actual_quantity >= 300,000` were flagged as outliers and removed.
-- **Garden**:
-  - Locations with `location_area_ha >= 0.8` or `actual_quantity >= 1,500` were flagged as outliers and removed.
-- **Greenhouse**:
-  - Locations with `location_area_ha >= 0.1` or `actual_quantity >= 200` were flagged as outliers and removed.
+
+-   **Field**:
+    -   Locations with `location_area_ha >= 160` or `actual_quantity >= 300,000` were flagged as outliers and removed.
+-   **Garden**:
+    -   Locations with `location_area_ha >= 0.8` or `actual_quantity >= 1,500` were flagged as outliers and removed.
+-   **Greenhouse**:
+    -   Locations with `location_area_ha >= 0.1` or `actual_quantity >= 200` were flagged as outliers and removed.
 
 ##### **Per Crop Group**:
-- **Fruit and Nuts**:
-  - Locations with `location_area_ha < 10` and `actual_quantity <= 250` were removed.
-- **Vegetables and Melons**:
-  - Locations with `location_area_ha < 50` and `actual_quantity < 50` were removed.
-- **Oilseed Crops and Oleaginous Fruits**:
-  - Locations with `location_area_ha < 2` and `actual_quantity < 120` were removed.
-- **Other Crops**:
-  - Locations with `location_area_ha < 50` and `actual_quantity < 50` were removed.
-- **Stimulant, Spice, and Aromatic Crops**:
-  - Locations with `location_area_ha < 15` and `actual_quantity <= 220` were removed.
-- **Sugar Crops**:
-  - Locations with `location_area_ha < 2` and `actual_quantity <= 1,000` were removed.
-- **Cereals**:
-  - Locations with `location_area_ha <= 15` and `actual_quantity <= 3,000` were removed.
-- **Leguminous Crops**:
-  - Locations with `location_area_ha <= 6` and `actual_quantity <= 200` were removed.
+
+-   **Fruit and Nuts**:
+    -   Locations with `location_area_ha < 10` and `actual_quantity <= 250` were removed.
+-   **Vegetables and Melons**:
+    -   Locations with `location_area_ha < 50` and `actual_quantity < 50` were removed.
+-   **Oilseed Crops and Oleaginous Fruits**:
+    -   Locations with `location_area_ha < 2` and `actual_quantity < 120` were removed.
+-   **Other Crops**:
+    -   Locations with `location_area_ha < 50` and `actual_quantity < 50` were removed.
+-   **Stimulant, Spice, and Aromatic Crops**:
+    -   Locations with `location_area_ha < 15` and `actual_quantity <= 220` were removed.
+-   **Sugar Crops**:
+    -   Locations with `location_area_ha < 2` and `actual_quantity <= 1,000` were removed.
+-   **Cereals**:
+    -   Locations with `location_area_ha <= 15` and `actual_quantity <= 3,000` were removed.
+-   **Leguminous Crops**:
+    -   Locations with `location_area_ha <= 6` and `actual_quantity <= 200` were removed.
 
 #### 5. Advanced Filtering Using Mean ± 2 Standard Deviations:
-   - For some crop groups (e.g., High Starch Root/Tuber Crops, Potatoes and Yams, Beverage and Spice Crops):
-     - Calculate the mean and standard deviation.
-     - Retain data points within:
-       \[
-       \text{Mean} \pm 2 \times \text{Standard Deviation}
-       \]
 
----
+-   For some crop groups (e.g., High Starch Root/Tuber Crops, Potatoes and Yams, Beverage and Spice Crops):
+    -   Calculate the mean and standard deviation.
+    -   Retain data points within: \[ \text{Mean} \pm 2 \times \text{Standard Deviation} \]
+
+------------------------------------------------------------------------
 
 ## Visualizations
 
 ### 1. Boxplots
-- **By Location Type**:
-  - Show the distribution of `actual_quantity` across `field`, `garden`, and `greenhouse`.
-  - Highlight how outliers affect the spread and central tendency.
-- **By Crop Group**:
-  - Compare `actual_quantity` across different `crop_group` values to identify trends and variability.
+
+-   **By Location Type**:
+    -   Show the distribution of `actual_quantity` across `field`, `garden`, and `greenhouse`.
+    -   Highlight how outliers affect the spread and central tendency.
+-   **By Crop Group**:
+    -   Compare `actual_quantity` across different `crop_group` values to identify trends and variability.
 
 ### 2. Scatterplots
-- **By Location Type**:
-  - Plot `location_area_ha` vs. `actual_quantity` for each location type.
-  - Highlight the relationship between farm size and yield for `field`, `garden`, and `greenhouse`.
-- **By Crop Group**:
-  - Show the distribution of `actual_quantity` vs. `location_area_ha` for each crop group, distinguishing between types (e.g., Field vs. Garden).
+
+-   **By Location Type**:
+    -   Plot `location_area_ha` vs. `actual_quantity` for each location type.
+    -   Highlight the relationship between farm size and yield for `field`, `garden`, and `greenhouse`.
+-   **By Crop Group**:
+    -   Show the distribution of `actual_quantity` vs. `location_area_ha` for each crop group, distinguishing between types (e.g., Field vs. Garden).
 
 ### 3. Histograms
-- **By Location Type**:
-  - Show frequency distributions of `actual_quantity` for `field`, `garden`, and `greenhouse` before and after outlier removal.
-- **By Crop Group**:
-  - Display frequency distributions of `actual_quantity` within each crop group before and after outlier removal.
 
----
+-   **By Location Type**:
+    -   Show frequency distributions of `actual_quantity` for `field`, `garden`, and `greenhouse` before and after outlier removal.
+-   **By Crop Group**:
+    -   Display frequency distributions of `actual_quantity` within each crop group before and after outlier removal.
+
+------------------------------------------------------------------------
 
 ## Benefits of This Strategy
 
-- **Improved Data Quality**:
-  - Outliers that distort trends and visualizations are removed.
-- **Targeted Outlier Detection**:
-  - Combines general statistical methods (e.g., IQR) with specific thresholds based on domain knowledge.
-- **Enhanced Visualizations**:
-  - Produces accurate and meaningful visualizations, enabling better decision-making.
+-   **Improved Data Quality**:
+    -   Outliers that distort trends and visualizations are removed.
+-   **Targeted Outlier Detection**:
+    -   Combines general statistical methods (e.g., IQR) with specific thresholds based on domain knowledge.
+-   **Enhanced Visualizations**:
+    -   Produces accurate and meaningful visualizations, enabling better decision-making.
 
----
+------------------------------------------------------------------------
 
 ## Conclusion
 

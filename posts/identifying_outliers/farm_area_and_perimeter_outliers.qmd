@@ -1,0 +1,178 @@
+### Identifying and Managing Outliers in Farm Area and Perimeter Data for Enhanced Analysis
+
+This strategy focuses on systematically identifying and handling outliers in farm area and perimeter data based on country and location type. By calculating and applying well-defined limits, we ensure the dataset's integrity and reliability for producing meaningful insights and visualizations.
+
+------------------------------------------------------------------------
+
+### **Rationale**
+
+Outliers in area and perimeter data can arise from various sources, such as:
+
+-   Errors in data collection or entry.
+
+-   Natural variations in farm sizes across regions and location types.
+
+-   Inclusion of atypical farms or locations, such as ceremonial areas or natural reserves.
+
+These anomalies can distort trends, making it critical to identify and manage them. Our approach involved calculating precise bounds tailored to each country and location type, allowing for better handling of variability.
+
+------------------------------------------------------------------------
+
+### **Implementation Strategy**
+
+#### **Data Sources**
+
+Key columns from the dataset:
+
+-   `country_name`: The country where the farm is located.
+
+-   `type`: The type of location (e.g., field, greenhouse, natural_area).
+
+-   `total_area_ha`: The total area of the location in hectares.
+
+-   `total_perimeter_m`: The total perimeter of the location in meters.
+
+------------------------------------------------------------------------
+
+#### **Steps**
+
+##### **1. Calculate Descriptive Statistics**
+
+We began by analyzing the minimum, maximum, and mean values for both area and perimeter by location type across all countries. For example:
+
+-   **Fields in Brazil**:
+
+    -   Min Area: 0 ha
+
+    -   Max Area: 4,247,578 ha
+
+    -   Mean Area: 422.44 ha
+
+    -   Min Perimeter: 0 m
+
+    -   Max Perimeter: 900,000 m
+
+    -   Mean Perimeter: 665.21 m
+
+-   **Greenhouses in Canada**:
+
+    -   Min Area: 0.000013 ha
+
+    -   Max Area: 719.07 ha
+
+    -   Mean Area: 1.16 ha
+
+    -   Min Perimeter: 4 m
+
+    -   Max Perimeter: 13,288 m
+
+    -   Mean Perimeter: 132.79 m
+
+##### **2. Percentile-Based Thresholds**
+
+For each location type within a country, we calculated the 5th percentile (lower cap) and 95th percentile (upper cap) for `total_area_ha` and `total_perimeter_m`. This helped filter out extreme values at both ends of the spectrum. For instance:
+
+-   **Fields in Japan**:
+
+    -   Lower Cap (Area): 0.0017 ha
+
+    -   Upper Cap (Area): 2.08 ha
+
+    -   Lower Cap (Perimeter): 14 m
+
+    -   Upper Cap (Perimeter): 947 m
+
+-   **Greenhouses in Brazil**:
+
+    -   Lower Cap (Area): 0.001 ha
+
+    -   Upper Cap (Area): 0.1011 ha
+
+    -   Lower Cap (Perimeter): 14.55 m
+
+    -   Upper Cap (Perimeter): 206 m
+
+##### **3. Interquartile Range (IQR) Analysis**
+
+To refine our thresholds, we used the IQR method:
+
+-   **IQR Formula**:
+    IQR=Q3−Q1\text{IQR} = Q3 - Q1IQR=Q3−Q1
+
+    -   **Lower Bound**: Q1−1.5×IQRQ1 - 1.5 \times \text{IQR}Q1−1.5×IQR (set to 0 if negative).
+
+    -   **Upper Bound**: Q3+1.5×IQRQ3 + 1.5 \times \text{IQR}Q3+1.5×IQR.
+
+For example:
+
+-   **Farm Site Boundaries in Colombia**:
+
+    -   IQR Area: 0 to 19.13 ha
+
+    -   IQR Perimeter: 106 to 2,998 m.
+
+-   **Residences in the U.S.**:
+
+    -   IQR Area: 0 to 0.075 ha
+
+    -   IQR Perimeter: 27 to 144 m.
+
+##### **4. Merging and Combining Thresholds**
+
+We combined percentile-based and IQR-based thresholds to define the final limits:
+
+-   **Lower Limit**: Maximum of the 5th percentile and the IQR lower bound.
+
+-   **Upper Limit**: Minimum of the 95th percentile, maximum value, and the IQR upper bound.
+
+For instance:
+
+-   **Barns in Canada**:
+
+    -   Lower Area Limit: 0.0014 ha
+
+    -   Upper Area Limit: 0.055 ha
+
+    -   Lower Perimeter Limit: 16 m
+
+    -   Upper Perimeter Limit: 125.5 m.
+
+------------------------------------------------------------------------
+
+#### **5. Filtering Valid and Outlier Data**
+
+Using the calculated limits, we filtered the dataset into:
+
+-   **Valid Data**: Farms with areas and perimeters within the defined bounds.
+
+-   **Outliers**: Farms falling outside these bounds.
+
+For example:
+
+-   **Valid Farms in Colombia**:
+
+    -   Farm Site Boundaries with area between 0.0471 ha and 19.13 ha, and perimeter between 106 m and 2,998 m.
+
+-   **Outlier Farms in Japan**:
+
+    -   Fields with area below 0.0017 ha or above 2.08 ha, or perimeter outside the range of 14 m to 947 m.
+
+##### **Overlap Analysis**
+
+We identified farms with both valid and outlier location types, such as a valid barn but an outlier field. This provided additional insights into farms with mixed characteristics.
+
+------------------------------------------------------------------------
+
+### **Benefits of This Strategy**
+
+-   **Improved Data Quality**: Removes inconsistent and extreme values while preserving valid variability.
+
+-   **Country-Specific Analysis**: Tailored limits for each country and location type ensure cultural and geographical context is respected.
+
+-   **Enhanced Visualizations**: Clearer trends and relationships after outlier removal.
+
+------------------------------------------------------------------------
+
+### **Conclusion**
+
+This approach systematically identified and managed outliers in farm area and perimeter data, balancing statistical methods (percentiles, IQR) with practical domain considerations. By merging multiple thresholds, we ensured robust and actionable results, enabling accurate analysis of agricultural patterns across diverse countries and location types.

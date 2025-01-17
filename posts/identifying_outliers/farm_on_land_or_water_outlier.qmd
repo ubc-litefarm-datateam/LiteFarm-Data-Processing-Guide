@@ -1,109 +1,109 @@
-Here's the documentation for your methodology in a structured format:
-
----
-
 # Identifying Farms on *Land or Ocean*
 
 This methodology was implemented to classify farms as being located on land or in the ocean based on their geographic coordinates. This classification aimed to improve the accuracy and reliability of spatial analyses by identifying potential outliers (e.g., farms with invalid locations).
 
----
+------------------------------------------------------------------------
 
 ## Rationale
 
 In the LiteFarm database, some farms have geographic coordinates that place them in unexpected locations, such as oceans or water bodies. While some of these farms are valid (e.g., located on small islands or near coastal boundaries), others may be due to data entry errors or inaccuracies in the mapping process. By identifying and classifying such farms, we aim to:
 
-- Ensure data reliability for spatial and environmental analyses.
-- Exclude invalid farms to avoid skewed results.
-- Highlight farms near coastlines or on small islands as potential outliers for manual review.
+-   Ensure data reliability for spatial and environmental analyses.
+-   Exclude invalid farms to avoid skewed results.
+-   Highlight farms near coastlines or on small islands as potential outliers for manual review.
 
----
+------------------------------------------------------------------------
 
 ## Methodology
 
 ### 1. **Data Extraction**
-   - The farm data was extracted from the LiteFarm database using an SQL query.
-   - Filters were applied to exclude test farms and known "fake" farms, ensuring only genuine records were analyzed.
-   - Key attributes included:
-     - **`farm_id`**: Unique identifier for each farm.
-     - **`farm_name`**: Name of the farm.
-     - **`country_name`**: Country where the farm is located.
-     - **`grid_points`**: Latitude and longitude coordinates representing the farm's location.
+
+-   The farm data was extracted from the LiteFarm database using an SQL query.
+-   Filters were applied to exclude test farms and known "fake" farms, ensuring only genuine records were analyzed.
+-   Key attributes included:
+    -   **`farm_id`**: Unique identifier for each farm.
+    -   **`farm_name`**: Name of the farm.
+    -   **`country_name`**: Country where the farm is located.
+    -   **`grid_points`**: Latitude and longitude coordinates representing the farm's location.
 
 ### 2. **Land/Water Classification**
-   - The **Natural Earth 10m Land Dataset** (`ne_10m_land.shp`) was used for high-resolution land boundary data.
-   - Using the `geopandas` library, the following steps were performed:
-     - **Point-in-Polygon Check**: Each farm's `grid_points` were converted into geographic points. These points were tested against the land polygons to determine if they fall within a land boundary.
-     - **Classification**: Farms were labeled as:
-       - **"Land"**: If the point fell inside a land polygon.
-       - **"Ocean"**: If the point fell outside all land polygons.
+
+-   The **Natural Earth 10m Land Dataset** (`ne_10m_land.shp`) was used for high-resolution land boundary data.
+-   Using the `geopandas` library, the following steps were performed:
+    -   **Point-in-Polygon Check**: Each farm's `grid_points` were converted into geographic points. These points were tested against the land polygons to determine if they fall within a land boundary.
+    -   **Classification**: Farms were labeled as:
+        -   **"Land"**: If the point fell inside a land polygon.
+        -   **"Ocean"**: If the point fell outside all land polygons.
 
 ### 3. **Enhancing Accuracy with Buffers**
-   - A buffer of 200 meters was added around each farm's point to account for:
-     - Minor inaccuracies in land boundary data.
-     - Limited precision in geographic coordinates.
-   - If the buffered point intersected a land polygon, the farm was classified as **"Land"**; otherwise, it was classified as **"Ocean"**.
+
+-   A buffer of 200 meters was added around each farm's point to account for:
+    -   Minor inaccuracies in land boundary data.
+    -   Limited precision in geographic coordinates.
+-   If the buffered point intersected a land polygon, the farm was classified as **"Land"**; otherwise, it was classified as **"Ocean"**.
 
 ### 4. **Outlier Detection**
-   - Farms labeled as **"Ocean"** were flagged as potential outliers.
-   - These farms were compiled into a separate dataset for further inspection, as their locations were not expected to represent valid farm locations.
+
+-   Farms labeled as **"Ocean"** were flagged as potential outliers.
+-   These farms were compiled into a separate dataset for further inspection, as their locations were not expected to represent valid farm locations.
 
 ### 5. **Validation and Manual Inspection**
-   - The flagged farms were manually inspected using the **Farm Explorer** tab on the LiteFarm dashboard to verify their actual locations.
-   - Farms that appeared to be valid (e.g., located on small islands or very close to the coast) were confirmed as legitimate but still classified as outliers due to:
-     - Their small size or unusual location.
-     - Potential for producing skewed results in broader analyses.
+
+-   The flagged farms were manually inspected using the **Farm Explorer** tab on the LiteFarm dashboard to verify their actual locations.
+-   Farms that appeared to be valid (e.g., located on small islands or very close to the coast) were confirmed as legitimate but still classified as outliers due to:
+    -   Their small size or unusual location.
+    -   Potential for producing skewed results in broader analyses.
 
 ### 6. **Updating the SQL Query**
-   - Farms confirmed to lie in the ocean (i.e., invalid farms) were excluded from the dataset by adding their `farm_id` values to an exclusion list in the SQL query.
-   - This updated query ensures that all subsequent analyses and operations exclude invalid farms, improving the reliability of the dataset.
 
----
+-   Farms confirmed to lie in the ocean (i.e., invalid farms) were excluded from the dataset by adding their `farm_id` values to an exclusion list in the SQL query.
+-   This updated query ensures that all subsequent analyses and operations exclude invalid farms, improving the reliability of the dataset.
+
+------------------------------------------------------------------------
 
 ## Classification Results
 
-- **Land Farms**:
-  - Farms that fell within land polygons or whose buffered points intersected land boundaries.
-- **Ocean Farms**:
-  - Farms that fell outside land polygons and could not be confirmed as valid locations through manual inspection.
+-   **Land Farms**:
+    -   Farms that fell within land polygons or whose buffered points intersected land boundaries.
+-   **Ocean Farms**:
+    -   Farms that fell outside land polygons and could not be confirmed as valid locations through manual inspection.
 
----
+------------------------------------------------------------------------
 
 ## Key Observations
 
-1. **Valid Farms in the Ocean**:
-   - Some farms initially classified as "Ocean" were located on small islands or near coastal boundaries.
-   - These farms were valid but flagged as outliers due to their geographic characteristics.
+1.  **Valid Farms in the Ocean**:
+    -   Some farms initially classified as "Ocean" were located on small islands or near coastal boundaries.
+    -   These farms were valid but flagged as outliers due to their geographic characteristics.
+2.  **Impact on Analyses**:
+    -   Excluding farms classified as "Ocean" ensures cleaner and more reliable data for spatial analyses.
+    -   However, valid farms near coastlines or on small islands may require separate consideration for specific analyses.
+3.  **Outliers**:
+    -   Farms in unusual locations (e.g., small islands or coastal areas) may produce skewed results in broader spatial analyses, especially when analyzing trends by proximity to metropolitan areas or landmass sizes.
 
-2. **Impact on Analyses**:
-   - Excluding farms classified as "Ocean" ensures cleaner and more reliable data for spatial analyses.
-   - However, valid farms near coastlines or on small islands may require separate consideration for specific analyses.
-
-3. **Outliers**:
-   - Farms in unusual locations (e.g., small islands or coastal areas) may produce skewed results in broader spatial analyses, especially when analyzing trends by proximity to metropolitan areas or landmass sizes.
-
----
+------------------------------------------------------------------------
 
 ## Benefits of This Approach
 
-- **Improved Data Integrity**:
-  - Ensures only valid farms are included in the dataset.
-- **Accurate Spatial Analysis**:
-  - Distinguishes between farms on land and those in unexpected locations, improving analysis reliability.
-- **Identifies Edge Cases**:
-  - Highlights farms near coastlines or on small islands for manual inspection and further analysis.
+-   **Improved Data Integrity**:
+    -   Ensures only valid farms are included in the dataset.
+-   **Accurate Spatial Analysis**:
+    -   Distinguishes between farms on land and those in unexpected locations, improving analysis reliability.
+-   **Identifies Edge Cases**:
+    -   Highlights farms near coastlines or on small islands for manual inspection and further analysis.
 
----
+------------------------------------------------------------------------
 
 ## Considerations
 
-- **Coastal Farms**:
-  - Farms near coastlines or on small islands are valid but may require separate handling in analyses.
-- **Boundary Precision**:
-  - The resolution of the land boundary dataset and the buffer size can influence classification results.
-- **Manual Validation**:
-  - While effective, manual inspection is time-consuming and may not scale to larger datasets.
+-   **Coastal Farms**:
+    -   Farms near coastlines or on small islands are valid but may require separate handling in analyses.
+-   **Boundary Precision**:
+    -   The resolution of the land boundary dataset and the buffer size can influence classification results.
+-   **Manual Validation**:
+    -   While effective, manual inspection is time-consuming and may not scale to larger datasets.
 
----
+------------------------------------------------------------------------
 
 ## Conclusion
 

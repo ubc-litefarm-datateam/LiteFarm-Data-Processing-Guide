@@ -2,17 +2,17 @@
 
 This strategy helps to calculate the total area of farms and determine their precise centroid coordinates. This approach addresses discrepancies between the farm's initial location and the actual mapped areas within the farm, enhancing the reliability of spatial analyses.
 
----
+------------------------------------------------------------------------
 
 ## Rationale
 
-When users create a farm, they can set the farm's location by providing an address, entering coordinates, or dropping a pin on the map. However, during the mapping workflow, users might draw the farm map (fields, gardens, etc.) in separate or multiple locations. This discrepancy can lead to significant differences between the initially set location and the actual mapped areas. 
+When users create a farm, they can set the farm's location by providing an address, entering coordinates, or dropping a pin on the map. However, during the mapping workflow, users might draw the farm map (fields, gardens, etc.) in separate or multiple locations. This discrepancy can lead to significant differences between the initially set location and the actual mapped areas.
 
 We observed instances where the centroid calculated from mapped areas and the user-provided location differed by over 25 km. While this does not indicate fraudulent farm entries, it highlights cases where multiple significant locations (e.g., fields, gardens) were grouped under one farm name and farm ID.
 
 These discrepancies can impact spatial analyses, such as identifying the closest metropolitan area to a farm, evaluating farm diversity, or assessing environmental influences.
 
----
+------------------------------------------------------------------------
 
 ## Implementation Strategy
 
@@ -20,65 +20,60 @@ These discrepancies can impact spatial analyses, such as identifying the closest
 
 We utilized the following data sources:
 
-- **Farm Data**: General information about the farm, including user-inputted grid points.
-- **Mapped Areas**: Polygon data representing fields, gardens, and other regions within the farm.
-- **Location Data**: Associated coordinates of mapped farm areas.
+-   **Farm Data**: General information about the farm, including user-inputted grid points.
+-   **Mapped Areas**: Polygon data representing fields, gardens, and other regions within the farm.
+-   **Location Data**: Associated coordinates of mapped farm areas.
 
 ### Calculation Steps
 
-1. **Parse Coordinates**:
-   - Convert any string representations of coordinates into a structured list for further analysis.
+1.  **Parse Coordinates**:
+    -   Convert any string representations of coordinates into a structured list for further analysis.
+2.  **Compute Centroid**:
+    -   Calculate the centroid for areas marked as "Farm Site Boundary" if available.
+    -   If no "Farm Site Boundary" exists, aggregate coordinates from all mapped areas (e.g., fields, gardens) to compute a cumulative centroid.
+3.  **Distance Analysis**:
+    -   Compare the centroid of the mapped areas with the initial user-provided location (`grid_points`).
+    -   Calculate distances between these two points using geospatial methods and classify farms based on proximity:
+        -   Within 500m, 1km, 5km, 10km, and 15km.
+        -   Beyond 15km and 25km.
+4.  **Data Output**:
+    -   Generate a refined dataset containing the farm ID, centroid coordinates, user-provided grid points, and calculated distances.
 
-2. **Compute Centroid**:
-   - Calculate the centroid for areas marked as "Farm Site Boundary" if available.
-   - If no "Farm Site Boundary" exists, aggregate coordinates from all mapped areas (e.g., fields, gardens) to compute a cumulative centroid.
-
-3. **Distance Analysis**:
-   - Compare the centroid of the mapped areas with the initial user-provided location (`grid_points`).
-   - Calculate distances between these two points using geospatial methods and classify farms based on proximity:
-     - Within 500m, 1km, 5km, 10km, and 15km.
-     - Beyond 15km and 25km.
-
-4. **Data Output**:
-   - Generate a refined dataset containing the farm ID, centroid coordinates, user-provided grid points, and calculated distances.
-
----
+------------------------------------------------------------------------
 
 ## Key Observations
 
-1. **Centroid Discrepancy**:
-   - Some farms showed centroid-to-user-location distances exceeding 25 km.
-   - This indicates that users grouped multiple separate significant areas under a single farm ID.
+1.  **Centroid Discrepancy**:
+    -   Some farms showed centroid-to-user-location distances exceeding 25 km.
+    -   This indicates that users grouped multiple separate significant areas under a single farm ID.
+2.  **Outlier Farms**:
+    -   Farms with large discrepancies between their centroid and user-provided locations were flagged as outliers.
+    -   These farms are not considered fraudulent but represent unique cases with dispersed mapped areas.
 
-2. **Outlier Farms**:
-   - Farms with large discrepancies between their centroid and user-provided locations were flagged as outliers.
-   - These farms are not considered fraudulent but represent unique cases with dispersed mapped areas.
-
----
+------------------------------------------------------------------------
 
 ## Benefits of This Strategy
 
-- **Improved Spatial Accuracy**:
-  - Allows for precise identification of farm locations based on actual mapped areas.
-- **Flexible Analysis Options**:
-  - Enables researchers to select either user-provided coordinates or computed centroids, depending on the analysis.
-- **Enhanced Data Integrity**:
-  - Highlights outlier cases for further review, ensuring better understanding of farm spatial distributions.
+-   **Improved Spatial Accuracy**:
+    -   Allows for precise identification of farm locations based on actual mapped areas.
+-   **Flexible Analysis Options**:
+    -   Enables researchers to select either user-provided coordinates or computed centroids, depending on the analysis.
+-   **Enhanced Data Integrity**:
+    -   Highlights outlier cases for further review, ensuring better understanding of farm spatial distributions.
 
----
+------------------------------------------------------------------------
 
 ## Considerations
 
-1. **Data Quality**:
-   - Relies on accurate user mappings. Errors in mapped data can affect the centroid calculations.
-2. **Outlier Handling**:
-   - Outlier farms may require manual review for specific analyses.
-3. **Computational Resources**:
-   - Handling large datasets with complex geometries may require significant computational power.
+1.  **Data Quality**:
+    -   Relies on accurate user mappings. Errors in mapped data can affect the centroid calculations.
+2.  **Outlier Handling**:
+    -   Outlier farms may require manual review for specific analyses.
+3.  **Computational Resources**:
+    -   Handling large datasets with complex geometries may require significant computational power.
 
----
+------------------------------------------------------------------------
 
 ## Conclusion
 
 This approach reconciles differences between initial farm locations and actual mapped areas, providing a comprehensive spatial representation of farms. While outlier farms with significant centroid-to-user-location discrepancies are noted, they are still valid entries, representing unique spatial distributions. This refined spatial data improves the accuracy and reliability of analyses involving farm proximity, urban interactions, and geographic diversity.
-

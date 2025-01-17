@@ -10,7 +10,7 @@ During data collection, especially in systems undergoing testing or user onboard
 
 To remove farms with invalid names, We utilize the following SQL query. This query filters out entries where the `farm_name` contains any of the specified substrings indicative of a test or placeholder name.
 
-```sql
+``` sql
 WHERE LOWER(f.farm_name) LIKE '%fake%'
    OR LOWER(f.farm_name) LIKE '%prueba%'
    OR LOWER(f.farm_name) LIKE '%test%'
@@ -31,21 +31,21 @@ WHERE LOWER(f.farm_name) LIKE '%fake%'
 
 ### Explanation of Keywords
 
-- **fake, test, sample, demo, dummy, not real**: Commonly used in testing environments to denote non-real entries.
-- **prueba**: Spanish for "test," capturing non-English placeholder names.
-- **abc, 123, ab**: Generic placeholders often used when real data isn't available.
-- **hola**: Spanish for "hello," possibly used as a default or test entry.
-- **delete, none, n/a**: Entries that may have been marked for deletion or indicate missing data.
-- **wrong**: Indicates an incorrect or placeholder entry.
-- **litefarm**: Might be used as a default name within the system or during demonstrations.
+-   **fake, test, sample, demo, dummy, not real**: Commonly used in testing environments to denote non-real entries.
+-   **prueba**: Spanish for "test," capturing non-English placeholder names.
+-   **abc, 123, ab**: Generic placeholders often used when real data isn't available.
+-   **hola**: Spanish for "hello," possibly used as a default or test entry.
+-   **delete, none, n/a**: Entries that may have been marked for deletion or indicate missing data.
+-   **wrong**: Indicates an incorrect or placeholder entry.
+-   **litefarm**: Might be used as a default name within the system or during demonstrations.
 
 The `LOWER()` function ensures the query is case-insensitive, capturing variations like "Test" and "test."
 
 ## Benefits of This Strategy
 
-- **Improved Data Quality**: Eliminates non-genuine entries, leading to more accurate analyses.
-- **Efficiency**: Reduces the noise in the dataset, making data processing and analysis more efficient.
-- **Reliability**: Enhances the trustworthiness of insights derived from the data.
+-   **Improved Data Quality**: Eliminates non-genuine entries, leading to more accurate analyses.
+-   **Efficiency**: Reduces the noise in the dataset, making data processing and analysis more efficient.
+-   **Reliability**: Enhances the trustworthiness of insights derived from the data.
 
 ## Considerations
 

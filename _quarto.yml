@@ -24,6 +24,10 @@ website:
             href: posts/identifying_outliers/farm_on_land_or_water_outlier.qmd
           - text: "Harvest Data Outlier"
             href: posts/identifying_outliers/harvest_data_outlier.qmd
+          - text: "Shape Analysis"
+            href: posts/identifying_fake_farms/shape_analysis.qmd
+          - text: "Farm area and perimeter Outliers"
+            href: posts/identifying_outliers/farm_area_and_perimeter_outliers.qmd
     right:
       - icon: github
         href: "https://github.com/ubc-litefarm-datateam/LiteFarm-Data-Processing-Guide"
