@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>filter_emails – LiteFarm Data Processing Guide</title>
+<title>farm_area_and_perimeter_outliers – LiteFarm Data Processing Guide</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,40 +19,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -190,21 +156,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul class="collapse">
-  <li><a href="#filtering-out-farms-associated-with-invalid-emails-sql" id="toc-filtering-out-farms-associated-with-invalid-emails-sql" class="nav-link active" data-scroll-target="#filtering-out-farms-associated-with-invalid-emails-sql">Filtering Out Farms Associated with Invalid Emails (SQL)</a>
-  <ul class="collapse">
-  <li><a href="#rationale" id="toc-rationale" class="nav-link" data-scroll-target="#rationale">Rationale</a></li>
-  <li><a href="#implementation-using-sql" id="toc-implementation-using-sql" class="nav-link" data-scroll-target="#implementation-using-sql">Implementation Using SQL</a></li>
-  <li><a href="#benefits-of-this-strategy" id="toc-benefits-of-this-strategy" class="nav-link" data-scroll-target="#benefits-of-this-strategy">Benefits of This Strategy</a></li>
-  <li><a href="#considerations" id="toc-considerations" class="nav-link" data-scroll-target="#considerations">Considerations</a></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
-  </ul></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
@@ -212,61 +165,164 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="filtering-out-farms-associated-with-invalid-emails-sql" class="level1">
-<h1>Filtering Out Farms Associated with Invalid Emails (SQL)</h1>
-<p>In our ongoing efforts to validate farm data effectively, another crucial strategy is to filter out farms associated with invalid or non-genuine user emails. Specifically, we target emails containing the term “litefarm,” which are typically used by backend users or staff members. Excluding these farms ensures that our dataset reflects real-world farming activities and enhances the accuracy of our analyses.</p>
-<section id="rationale" class="level2">
-<h2 class="anchored" data-anchor-id="rationale">Rationale</h2>
-<p>During the development and maintenance of the Litefarm platform, staff members and developers often create test accounts using emails that include “litefarm” in the address (e.g., <code>test@litefarm.com</code>). Farms associated with these accounts are usually not real and are created for testing or demonstration purposes. Including such farms in data analyses can lead to skewed results and misinformed conclusions.</p>
+<section id="identifying-and-managing-outliers-in-farm-area-and-perimeter-data-for-enhanced-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="identifying-and-managing-outliers-in-farm-area-and-perimeter-data-for-enhanced-analysis">Identifying and Managing Outliers in Farm Area and Perimeter Data for Enhanced Analysis</h3>
+<p>This strategy focuses on systematically identifying and handling outliers in farm area and perimeter data based on country and location type. By calculating and applying well-defined limits, we ensure the dataset’s integrity and reliability for producing meaningful insights and visualizations.</p>
+<hr>
 </section>
-<section id="implementation-using-sql" class="level2">
-<h2 class="anchored" data-anchor-id="implementation-using-sql">Implementation Using SQL</h2>
-<p>To filter out farms associated with invalid emails, we join the <code>users</code>, <code>userFarm</code>, and <code>farm</code> tables to identify and exclude farms linked to users with emails containing “litefarm.” Below is the SQL query used to perform this filtering:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> f.<span class="op">*</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farm f</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> <span class="ot">"userFarm"</span> uf <span class="kw">ON</span> f.farm_id <span class="op">=</span> uf.farm_id</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> users u <span class="kw">ON</span> uf.user_id <span class="op">=</span> u.user_id</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> <span class="fu">LOWER</span>(u.email) <span class="kw">NOT</span> <span class="kw">LIKE</span> <span class="st">'%litefarm%'</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<section id="explanation" class="level3">
-<h3 class="anchored" data-anchor-id="explanation">Explanation</h3>
+<section id="rationale" class="level3">
+<h3 class="anchored" data-anchor-id="rationale"><strong>Rationale</strong></h3>
+<p>Outliers in area and perimeter data can arise from various sources, such as:</p>
 <ul>
-<li><strong>Tables Involved</strong>:
+<li><p>Errors in data collection or entry.</p></li>
+<li><p>Natural variations in farm sizes across regions and location types.</p></li>
+<li><p>Inclusion of atypical farms or locations, such as ceremonial areas or natural reserves.</p></li>
+</ul>
+<p>These anomalies can distort trends, making it critical to identify and manage them. Our approach involved calculating precise bounds tailored to each country and location type, allowing for better handling of variability.</p>
+<hr>
+</section>
+<section id="implementation-strategy" class="level3">
+<h3 class="anchored" data-anchor-id="implementation-strategy"><strong>Implementation Strategy</strong></h3>
+<section id="data-sources" class="level4">
+<h4 class="anchored" data-anchor-id="data-sources"><strong>Data Sources</strong></h4>
+<p>Key columns from the dataset:</p>
 <ul>
-<li><code>users</code>: Contains user information, including <code>email</code> and <code>user_id</code>.</li>
-<li><code>userFarm</code>: Associates users with farms through <code>user_id</code> and <code>farm_id</code>.</li>
-<li><code>farm</code>: Contains farm details identified by <code>farm_id</code>.</li>
+<li><p><code>country_name</code>: The country where the farm is located.</p></li>
+<li><p><code>type</code>: The type of location (e.g., field, greenhouse, natural_area).</p></li>
+<li><p><code>total_area_ha</code>: The total area of the location in hectares.</p></li>
+<li><p><code>total_perimeter_m</code>: The total perimeter of the location in meters.</p></li>
+</ul>
+<hr>
+</section>
+<section id="steps" class="level4">
+<h4 class="anchored" data-anchor-id="steps"><strong>Steps</strong></h4>
+<section id="calculate-descriptive-statistics" class="level5">
+<h5 class="anchored" data-anchor-id="calculate-descriptive-statistics"><strong>1. Calculate Descriptive Statistics</strong></h5>
+<p>We began by analyzing the minimum, maximum, and mean values for both area and perimeter by location type across all countries. For example:</p>
+<ul>
+<li><p><strong>Fields in Brazil</strong>:</p>
+<ul>
+<li><p>Min Area: 0 ha</p></li>
+<li><p>Max Area: 4,247,578 ha</p></li>
+<li><p>Mean Area: 422.44 ha</p></li>
+<li><p>Min Perimeter: 0 m</p></li>
+<li><p>Max Perimeter: 900,000 m</p></li>
+<li><p>Mean Perimeter: 665.21 m</p></li>
 </ul></li>
-<li><strong>Query Breakdown</strong>:
+<li><p><strong>Greenhouses in Canada</strong>:</p>
 <ul>
-<li><code>SELECT f.*</code>: Selects all columns from the <code>farm</code> table.</li>
-<li><code>JOIN "userFarm" uf ON f.farm_id = uf.farm_id</code>: Joins the <code>farm</code> and <code>userFarm</code> tables on <code>farm_id</code> to associate farms with users.</li>
-<li><code>JOIN users u ON uf.user_id = u.user_id</code>: Joins the result with the <code>users</code> table on <code>user_id</code> to access user emails.</li>
-<li><code>WHERE LOWER(u.email) NOT LIKE '%litefarm%'</code>: Filters out farms where the associated user’s email contains “litefarm,” making the search case-insensitive with <code>LOWER()</code>.</li>
+<li><p>Min Area: 0.000013 ha</p></li>
+<li><p>Max Area: 719.07 ha</p></li>
+<li><p>Mean Area: 1.16 ha</p></li>
+<li><p>Min Perimeter: 4 m</p></li>
+<li><p>Max Perimeter: 13,288 m</p></li>
+<li><p>Mean Perimeter: 132.79 m</p></li>
 </ul></li>
 </ul>
 </section>
-</section>
-<section id="benefits-of-this-strategy" class="level2">
-<h2 class="anchored" data-anchor-id="benefits-of-this-strategy">Benefits of This Strategy</h2>
+<section id="percentile-based-thresholds" class="level5">
+<h5 class="anchored" data-anchor-id="percentile-based-thresholds"><strong>2. Percentile-Based Thresholds</strong></h5>
+<p>For each location type within a country, we calculated the 5th percentile (lower cap) and 95th percentile (upper cap) for <code>total_area_ha</code> and <code>total_perimeter_m</code>. This helped filter out extreme values at both ends of the spectrum. For instance:</p>
 <ul>
-<li><strong>Enhanced Data Integrity</strong>: Removes non-genuine farms associated with staff or test accounts.</li>
-<li><strong>Accurate Analyses</strong>: Ensures that statistical analyses and reports are based on real farming data.</li>
-<li><strong>Resource Efficiency</strong>: Reduces the time and resources spent processing irrelevant data.</li>
+<li><p><strong>Fields in Japan</strong>:</p>
+<ul>
+<li><p>Lower Cap (Area): 0.0017 ha</p></li>
+<li><p>Upper Cap (Area): 2.08 ha</p></li>
+<li><p>Lower Cap (Perimeter): 14 m</p></li>
+<li><p>Upper Cap (Perimeter): 947 m</p></li>
+</ul></li>
+<li><p><strong>Greenhouses in Brazil</strong>:</p>
+<ul>
+<li><p>Lower Cap (Area): 0.001 ha</p></li>
+<li><p>Upper Cap (Area): 0.1011 ha</p></li>
+<li><p>Lower Cap (Perimeter): 14.55 m</p></li>
+<li><p>Upper Cap (Perimeter): 206 m</p></li>
+</ul></li>
 </ul>
 </section>
-<section id="considerations" class="level2">
-<h2 class="anchored" data-anchor-id="considerations">Considerations</h2>
+<section id="interquartile-range-iqr-analysis" class="level5">
+<h5 class="anchored" data-anchor-id="interquartile-range-iqr-analysis"><strong>3. Interquartile Range (IQR) Analysis</strong></h5>
+<p>To refine our thresholds, we used the IQR method:</p>
 <ul>
-<li><strong>Multiple Users per Farm</strong>: A farm might be associated with multiple users. Ensure that the farm is only excluded if all associated users have emails containing “litefarm.”</li>
-<li><strong>False Positives</strong>: Be cautious of legitimate users whose emails might inadvertently contain “litefarm.”</li>
+<li><p><strong>IQR Formula</strong>: IQR=Q3−Q1 = Q3 - Q1IQR=Q3−Q1</p>
+<ul>
+<li><p><strong>Lower Bound</strong>: Q1−1.5×IQRQ1 - 1.5 Q1−1.5×IQR (set to 0 if negative).</p></li>
+<li><p><strong>Upper Bound</strong>: Q3+1.5×IQRQ3 + 1.5 Q3+1.5×IQR.</p></li>
+</ul></li>
+</ul>
+<p>For example:</p>
+<ul>
+<li><p><strong>Farm Site Boundaries in Colombia</strong>:</p>
+<ul>
+<li><p>IQR Area: 0 to 19.13 ha</p></li>
+<li><p>IQR Perimeter: 106 to 2,998 m.</p></li>
+</ul></li>
+<li><p><strong>Residences in the U.S.</strong>:</p>
+<ul>
+<li><p>IQR Area: 0 to 0.075 ha</p></li>
+<li><p>IQR Perimeter: 27 to 144 m.</p></li>
+</ul></li>
 </ul>
 </section>
-<section id="conclusion" class="level2">
-<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>Filtering out farms associated with invalid emails is a vital step in maintaining the quality and reliability of our farm data. By implementing this SQL-based strategy, we can confidently proceed with analyses that reflect true farming practices and make informed decisions based on accurate data.</p>
+<section id="merging-and-combining-thresholds" class="level5">
+<h5 class="anchored" data-anchor-id="merging-and-combining-thresholds"><strong>4. Merging and Combining Thresholds</strong></h5>
+<p>We combined percentile-based and IQR-based thresholds to define the final limits:</p>
+<ul>
+<li><p><strong>Lower Limit</strong>: Maximum of the 5th percentile and the IQR lower bound.</p></li>
+<li><p><strong>Upper Limit</strong>: Minimum of the 95th percentile, maximum value, and the IQR upper bound.</p></li>
+</ul>
+<p>For instance:</p>
+<ul>
+<li><p><strong>Barns in Canada</strong>:</p>
+<ul>
+<li><p>Lower Area Limit: 0.0014 ha</p></li>
+<li><p>Upper Area Limit: 0.055 ha</p></li>
+<li><p>Lower Perimeter Limit: 16 m</p></li>
+<li><p>Upper Perimeter Limit: 125.5 m.</p></li>
+</ul></li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="filtering-valid-and-outlier-data" class="level4">
+<h4 class="anchored" data-anchor-id="filtering-valid-and-outlier-data"><strong>5. Filtering Valid and Outlier Data</strong></h4>
+<p>Using the calculated limits, we filtered the dataset into:</p>
+<ul>
+<li><p><strong>Valid Data</strong>: Farms with areas and perimeters within the defined bounds.</p></li>
+<li><p><strong>Outliers</strong>: Farms falling outside these bounds.</p></li>
+</ul>
+<p>For example:</p>
+<ul>
+<li><p><strong>Valid Farms in Colombia</strong>:</p>
+<ul>
+<li>Farm Site Boundaries with area between 0.0471 ha and 19.13 ha, and perimeter between 106 m and 2,998 m.</li>
+</ul></li>
+<li><p><strong>Outlier Farms in Japan</strong>:</p>
+<ul>
+<li>Fields with area below 0.0017 ha or above 2.08 ha, or perimeter outside the range of 14 m to 947 m.</li>
+</ul></li>
+</ul>
+<section id="overlap-analysis" class="level5">
+<h5 class="anchored" data-anchor-id="overlap-analysis"><strong>Overlap Analysis</strong></h5>
+<p>We identified farms with both valid and outlier location types, such as a valid barn but an outlier field. This provided additional insights into farms with mixed characteristics.</p>
+<hr>
+</section>
+</section>
+</section>
+<section id="benefits-of-this-strategy" class="level3">
+<h3 class="anchored" data-anchor-id="benefits-of-this-strategy"><strong>Benefits of This Strategy</strong></h3>
+<ul>
+<li><p><strong>Improved Data Quality</strong>: Removes inconsistent and extreme values while preserving valid variability.</p></li>
+<li><p><strong>Country-Specific Analysis</strong>: Tailored limits for each country and location type ensure cultural and geographical context is respected.</p></li>
+<li><p><strong>Enhanced Visualizations</strong>: Clearer trends and relationships after outlier removal.</p></li>
+</ul>
+<hr>
+</section>
+<section id="conclusion" class="level3">
+<h3 class="anchored" data-anchor-id="conclusion"><strong>Conclusion</strong></h3>
+<p>This approach systematically identified and managed outliers in farm area and perimeter data, balancing statistical methods (percentiles, IQR) with practical domain considerations. By merging multiple thresholds, we ensured robust and actionable results, enabling accurate analysis of agricultural patterns across diverse countries and location types.</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
