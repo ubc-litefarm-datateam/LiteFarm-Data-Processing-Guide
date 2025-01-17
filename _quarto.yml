@@ -10,7 +10,7 @@ website:
         href: index.qmd
       - text: "About"
         href: about.qmd
-      - text: "Identifying Fake Farms"
+      - text: "Identifying Invalid Farms"
         menu:
           - text: "Filter Emails"
             href: posts/identifying_fake_farms/filter_emails.qmd
@@ -25,7 +25,7 @@ website:
           - text: "Harvest Data Outlier"
             href: posts/identifying_outliers/harvest_data_outlier.qmd
           - text: "Shape Analysis"
-            href: posts/identifying_fake_farms/shape_analysis.qmd
+            href: posts/identifying_outliers/shape_analysis.qmd
           - text: "Farm area and perimeter Outliers"
             href: posts/identifying_outliers/farm_area_and_perimeter_outliers.qmd
     right:
