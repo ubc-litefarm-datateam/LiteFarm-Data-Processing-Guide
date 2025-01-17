@@ -96,8 +96,7 @@ For each location type within a country, we calculated the 5th percentile (lower
 
 To refine our thresholds, we used the IQR method:
 
--   **IQR Formula**:
-    IQR=Q3−Q1\text{IQR} = Q3 - Q1IQR=Q3−Q1
+-   **IQR Formula**: IQR=Q3−Q1\text{IQR} = Q3 - Q1IQR=Q3−Q1
 
     -   **Lower Bound**: Q1−1.5×IQRQ1 - 1.5 \times \text{IQR}Q1−1.5×IQR (set to 0 if negative).
 
