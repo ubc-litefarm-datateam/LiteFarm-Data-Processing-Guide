@@ -10,37 +10,36 @@ During the development and maintenance of the Litefarm platform, staff members a
 
 To filter out farms associated with invalid emails, we join the `users`, `userFarm`, and `farm` tables to identify and exclude farms linked to users with emails containing "litefarm." Below is the SQL query used to perform this filtering:
 
-```sql
+``` sql
 SELECT f.*
 FROM farm f
-JOIN "userFarm" uf ON f.farm_id = uf.farm_id
-JOIN users u ON uf.user_id = u.user_id
+JOIN user_farms uf ON f.id = uf.farm_id
+JOIN users u ON uf.user_id = u.id
 WHERE LOWER(u.email) NOT LIKE '%litefarm%';
 ```
 
 ### Explanation
 
-- **Tables Involved**:
-  - `users`: Contains user information, including `email` and `user_id`.
-  - `userFarm`: Associates users with farms through `user_id` and `farm_id`.
-  - `farm`: Contains farm details identified by `farm_id`.
-
-- **Query Breakdown**:
-  - `SELECT f.*`: Selects all columns from the `farm` table.
-  - `JOIN "userFarm" uf ON f.farm_id = uf.farm_id`: Joins the `farm` and `userFarm` tables on `farm_id` to associate farms with users.
-  - `JOIN users u ON uf.user_id = u.user_id`: Joins the result with the `users` table on `user_id` to access user emails.
-  - `WHERE LOWER(u.email) NOT LIKE '%litefarm%'`: Filters out farms where the associated user's email contains "litefarm," making the search case-insensitive with `LOWER()`.
+-   **Tables Involved**:
+    -   `users`: Contains user information, including `email` and `id`.
+    -   `user_farm`: Associates users with farms through user\_`id` and `farm_id`.
+    -   `farm`: Contains farm details identified by `fid`.
+-   **Query Breakdown**:
+    -   `SELECT f.*`: Selects all columns from the `farm` table.
+    -   `JOIN "user_farm" uf ON f.id = uf.farm_id`: Joins the `farm` and `user_farm` tables on `farm_id` to associate farms with users.
+    -   `JOIN users u ON uf.user_id = u.id`: Joins the result with the `users` table on `id` to access user emails.
+    -   `WHERE LOWER(u.email) NOT LIKE '%litefarm%'`: Filters out farms where the associated user's email contains "litefarm," making the search case-insensitive with `LOWER()`.
 
 ## Benefits of This Strategy
 
-- **Enhanced Data Integrity**: Removes non-genuine farms associated with staff or test accounts.
-- **Accurate Analyses**: Ensures that statistical analyses and reports are based on real farming data.
-- **Resource Efficiency**: Reduces the time and resources spent processing irrelevant data.
+-   **Enhanced Data Integrity**: Removes non-genuine farms associated with staff or test accounts.
+-   **Accurate Analyses**: Ensures that statistical analyses and reports are based on real farming data.
+-   **Resource Efficiency**: Reduces the time and resources spent processing irrelevant data.
 
 ## Considerations
 
-- **Multiple Users per Farm**: A farm might be associated with multiple users. Ensure that the farm is only excluded if all associated users have emails containing "litefarm."
-- **False Positives**: Be cautious of legitimate users whose emails might inadvertently contain "litefarm."
+-   **Multiple Users per Farm**: A farm might be associated with multiple users. Ensure that the farm is only excluded if all associated users have emails containing "litefarm."
+-   **False Positives**: Be cautious of legitimate users whose emails might inadvertently contain "litefarm."
 
 ## Conclusion
 
