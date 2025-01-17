@@ -224,23 +224,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>To filter out farms associated with invalid emails, we join the <code>users</code>, <code>userFarm</code>, and <code>farm</code> tables to identify and exclude farms linked to users with emails containing “litefarm.” Below is the SQL query used to perform this filtering:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> f.<span class="op">*</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farm f</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> <span class="ot">"userFarm"</span> uf <span class="kw">ON</span> f.farm_id <span class="op">=</span> uf.farm_id</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> users u <span class="kw">ON</span> uf.user_id <span class="op">=</span> u.user_id</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> user_farms uf <span class="kw">ON</span> f.<span class="kw">id</span> <span class="op">=</span> uf.farm_id</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> users u <span class="kw">ON</span> uf.user_id <span class="op">=</span> u.<span class="kw">id</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> <span class="fu">LOWER</span>(u.email) <span class="kw">NOT</span> <span class="kw">LIKE</span> <span class="st">'%litefarm%'</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <section id="explanation" class="level3">
 <h3 class="anchored" data-anchor-id="explanation">Explanation</h3>
 <ul>
 <li><strong>Tables Involved</strong>:
 <ul>
-<li><code>users</code>: Contains user information, including <code>email</code> and <code>user_id</code>.</li>
-<li><code>userFarm</code>: Associates users with farms through <code>user_id</code> and <code>farm_id</code>.</li>
-<li><code>farm</code>: Contains farm details identified by <code>farm_id</code>.</li>
+<li><code>users</code>: Contains user information, including <code>email</code> and <code>id</code>.</li>
+<li><code>user_farm</code>: Associates users with farms through user_<code>id</code> and <code>farm_id</code>.</li>
+<li><code>farm</code>: Contains farm details identified by <code>fid</code>.</li>
 </ul></li>
 <li><strong>Query Breakdown</strong>:
 <ul>
 <li><code>SELECT f.*</code>: Selects all columns from the <code>farm</code> table.</li>
-<li><code>JOIN "userFarm" uf ON f.farm_id = uf.farm_id</code>: Joins the <code>farm</code> and <code>userFarm</code> tables on <code>farm_id</code> to associate farms with users.</li>
-<li><code>JOIN users u ON uf.user_id = u.user_id</code>: Joins the result with the <code>users</code> table on <code>user_id</code> to access user emails.</li>
+<li><code>JOIN "user_farm" uf ON f.id = uf.farm_id</code>: Joins the <code>farm</code> and <code>user_farm</code> tables on <code>farm_id</code> to associate farms with users.</li>
+<li><code>JOIN users u ON uf.user_id = u.id</code>: Joins the result with the <code>users</code> table on <code>id</code> to access user emails.</li>
 <li><code>WHERE LOWER(u.email) NOT LIKE '%litefarm%'</code>: Filters out farms where the associated user’s email contains “litefarm,” making the search case-insensitive with <code>LOWER()</code>.</li>
 </ul></li>
 </ul>
