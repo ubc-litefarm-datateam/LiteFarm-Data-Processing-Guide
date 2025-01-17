@@ -304,7 +304,7 @@ window.Quarto = {
 <p>In this blog, we focus on identifying fake farms by analyzing field shapes to detect unrealistic entries. Our goal is to enhance data accuracy, providing a stronger foundation for future agriculture-related research.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="posts/identifying_outliers/posts/identifying_outliers/img/Litefarm.png" class="img-fluid figure-img"></p>
+<p><img src="img/Litefarm.png" class="img-fluid figure-img"></p>
 <figcaption>Litefarm Interface</figcaption>
 </figure>
 </div>
@@ -407,12 +407,12 @@ The polygons in each farm are categorized into various types:</p>
 <p>To perform a robust analysis, we systematically processed and evaluated the field polygon data through the following steps:</p>
 <section id="vertex-distribution-analysis" class="level3">
 <h3 class="anchored" data-anchor-id="vertex-distribution-analysis">1. Vertex Distribution Analysis</h3>
-<p>The first step in our analysis was to examine the <strong>vertex distribution</strong> of the field polygons to understand their general characteristics and ensure data quality. A box plot was created to visualize the distribution of vertex counts: <img src="posts/identifying_outliers/img/boxplot.png" class="img-fluid" alt="boxplot of vertices’ number distribution"></p>
+<p>The first step in our analysis was to examine the <strong>vertex distribution</strong> of the field polygons to understand their general characteristics and ensure data quality. A box plot was created to visualize the distribution of vertex counts: <img src="img/boxplot.png" class="img-fluid" alt="boxplot of vertices’ number distribution"></p>
 <p>The results revealed a wide range of vertex counts, spanning from 3 to 189 vertices. This variability required filtering to address potential outliers. Using the <strong>z-score method</strong>, we identified and excluded extreme values, capping the maximum vertex count at 34.</p>
 <p>After filtering, we analyzed the revised vertex distribution using a histogram, which revealed that 47.4% of field polygons had exactly four vertices:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="posts/identifying_outliers/img/number_of_vertices.png" class="img-fluid figure-img"></p>
+<p><img src="img/number_of_vertices.png" class="img-fluid figure-img"></p>
 <figcaption>histogram of number of veritces</figcaption>
 </figure>
 </div>
@@ -428,9 +428,9 @@ The polygons in each farm are categorized into various types:</p>
 <p>Scatter plots comparing the user-provided values with the recalculated metrics showed strong alignment, with most points clustering around the diagonal (dashed line), confirming the accuracy of the recalculated values:</p>
 <ul>
 <li><p><strong>Perimeter Comparison</strong><br>
-<img src="posts/identifying_outliers/img/perimeter1.png" class="img-fluid" alt="Perimeter Scatter Plot"></p></li>
+<img src="img/perimeter1.png" class="img-fluid" alt="Perimeter Scatter Plot"></p></li>
 <li><p><strong>Area Comparison</strong><br>
-<img src="posts/identifying_outliers/img/area1.png" class="img-fluid" alt="Area Scatter Plot"></p></li>
+<img src="img/area1.png" class="img-fluid" alt="Area Scatter Plot"></p></li>
 </ul>
 <p>This validation step provided confidence in the accuracy of the recalculated metrics, allowing us to proceed with subsequent shape analysis using reliable data.</p>
 </section>
@@ -445,7 +445,7 @@ The polygons in each farm are categorized into various types:</p>
 <li><strong>Standardizing Landmark Points</strong>:</li>
 </ol>
 <p>To enable meaningful comparisons in the size-and-shape space, each polygon was resampled to have exactly 34 evenly spaced points along its boundary. The following Python function illustrates this process:</p>
-<div id="f4f386cb" class="cell" data-execution_count="1">
+<div id="4da60ce3" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> folium</span>
@@ -480,7 +480,7 @@ The polygons in each farm are categorized into various types:</p>
 <span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> geomstats.visualization <span class="im">import</span> KendallDisk, KendallSphere</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="b4524477" class="cell" data-execution_count="2">
+<div id="ac9f5896" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> resample_polygon(projected_coords, num_points<span class="op">=</span><span class="dv">34</span>):</span>
@@ -509,7 +509,7 @@ The polygons in each farm are categorized into various types:</p>
 <li><strong>Ensuring Consistent Vertex Direction</strong>:</li>
 </ol>
 <p>All polygons were standardized to have vertices drawn in the same direction (clockwise or counterclockwise). This step ensures that the orientation of the vertices does not introduce inconsistencies in the analysis.</p>
-<div id="5ef01158" class="cell" data-execution_count="3">
+<div id="24b03126" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> is_clockwise(coords):</span>
@@ -543,7 +543,7 @@ The polygons in each farm are categorized into various types:</p>
 <p>The image illustrates four polygons that have been standardized by resampling them to have 34 evenly spaced points, with all vertices aligned in a clockwise direction.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="posts/identifying_outliers/img/resampled_polygon.png" class="img-fluid figure-img"></p>
+<p><img src="img/resampled_polygon.png" class="img-fluid figure-img"></p>
 <figcaption>The standardized polygon</figcaption>
 </figure>
 </div>
@@ -555,7 +555,7 @@ The polygons in each farm are categorized into various types:</p>
 </ul>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="posts/identifying_outliers/img/resamples_perimeter.png" class="img-fluid figure-img"></p>
+<p><img src="img/resamples_perimeter.png" class="img-fluid figure-img"></p>
 <figcaption>perimeter comparison</figcaption>
 </figure>
 </div>
@@ -564,7 +564,7 @@ The polygons in each farm are categorized into various types:</p>
 </ul>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="posts/identifying_outliers/img/resampled_area.png" class="img-fluid figure-img"></p>
+<p><img src="img/resampled_area.png" class="img-fluid figure-img"></p>
 <figcaption>area comparison</figcaption>
 </figure>
 </div>
@@ -624,7 +624,7 @@ d_S(X_1^o, X_2^o) = \sqrt{S_1^2 + S_2^2 - 2 S_1 S_2 \cos \rho(X_1^o, X_2^o)}
 <section id="python-implementation" class="level4">
 <h4 class="anchored" data-anchor-id="python-implementation">Python Implementation</h4>
 <p>The following Python code implements the entire process of shape alignment, Riemannian distance computation, and iterative Fréchet Mean calculation.</p>
-<div id="f618c3fb" class="cell" data-execution_count="4">
+<div id="3ed48139" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> align_shape(reference_shape, target_shape):</span>
@@ -737,20 +737,20 @@ d_S(X_1^o, X_2^o) = \sqrt{S_1^2 + S_2^2 - 2 S_1 S_2 \cos \rho(X_1^o, X_2^o)}
 <p>Here is the global Fréchet mean calculated from all field polygons:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="posts/identifying_outliers/img/mean_shape.png" class="img-fluid figure-img"></p>
+<p><img src="img/mean_shape.png" class="img-fluid figure-img"></p>
 <figcaption>The global mean shape</figcaption>
 </figure>
 </div>
 <p>The following image illustrates the original polygon and its alignment with the Fréchet mean:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="posts/identifying_outliers/img/aligned_shape.png" class="img-fluid figure-img"></p>
+<p><img src="img/aligned_shape.png" class="img-fluid figure-img"></p>
 <figcaption>Aligned Shape</figcaption>
 </figure>
 </div>
 <p>After aligning all shapes to the Fréchet mean, the <code>riemannian_distance</code> function was used to calculate the distances between the mean shape and each aligned shape. To identify potential outliers, the z-score method was applied to these distance values.</p>
 <p>Below are the four field polygons detected as outliers using the global Fréchet mean:</p>
-<div id="83bc21cf" class="cell" data-execution_count="5">
+<div id="4afff686" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -838,7 +838,7 @@ d_S(X_1^o, X_2^o) = \sqrt{S_1^2 + S_2^2 - 2 S_1 S_2 \cos \rho(X_1^o, X_2^o)}
 <p>In this visualization, <strong>different colors represent different continents</strong>. It is evident that both the shapes and areas of the field polygons differ substantially across regions, highlighting the diversity in field geometry across countries.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="posts/identifying_outliers/img/output.png" class="img-fluid figure-img"></p>
+<p><img src="img/output.png" class="img-fluid figure-img"></p>
 <figcaption>Summary of Countries’ Mean Shapes</figcaption>
 </figure>
 </div>
@@ -849,7 +849,7 @@ d_S(X_1^o, X_2^o) = \sqrt{S_1^2 + S_2^2 - 2 S_1 S_2 \cos \rho(X_1^o, X_2^o)}
 <h4 class="anchored" data-anchor-id="zambia">Zambia</h4>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="posts/identifying_outliers/img/small_number_country1.png" class="img-fluid figure-img"></p>
+<p><img src="img/small_number_country1.png" class="img-fluid figure-img"></p>
 <figcaption>Field polygons and Fréchet mean for Zambia</figcaption>
 </figure>
 </div>
@@ -858,7 +858,7 @@ d_S(X_1^o, X_2^o) = \sqrt{S_1^2 + S_2^2 - 2 S_1 S_2 \cos \rho(X_1^o, X_2^o)}
 <h4 class="anchored" data-anchor-id="chile">Chile</h4>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="posts/identifying_outliers/img/small_number_country.png" class="img-fluid figure-img"></p>
+<p><img src="img/small_number_country.png" class="img-fluid figure-img"></p>
 <figcaption>Field polygons and Fréchet mean for Chile</figcaption>
 </figure>
 </div>
@@ -884,7 +884,7 @@ d_S(X_1^o, X_2^o) = \sqrt{S_1^2 + S_2^2 - 2 S_1 S_2 \cos \rho(X_1^o, X_2^o)}
 </ul>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="posts/identifying_outliers/img/satelite.png" class="img-fluid figure-img"></p>
+<p><img src="img/satelite.png" class="img-fluid figure-img"></p>
 <figcaption>Satellite plot for all 51 potential fake fields</figcaption>
 </figure>
 </div>
