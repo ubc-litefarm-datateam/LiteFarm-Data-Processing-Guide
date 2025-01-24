@@ -37,7 +37,7 @@ In the LiteFarm database, some farms have geographic coordinates that place them
 
 ### 3. **Enhancing Accuracy with Buffers**
 
--   A buffer of 200 meters was added around each farm's point to account for:
+-   A buffer of 1000 meters was added around each farm's point to account for:
     -   Minor inaccuracies in land boundary data.
     -   Limited precision in geographic coordinates.
 -   If the buffered point intersected a land polygon, the farm was classified as **"Land"**; otherwise, it was classified as **"Ocean"**.
