@@ -32,4 +32,4 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           personal_token: ${{ secrets.QUARTO_TOKEN}}
-          publish_dir: ./public
+          publish_dir: ./_site
