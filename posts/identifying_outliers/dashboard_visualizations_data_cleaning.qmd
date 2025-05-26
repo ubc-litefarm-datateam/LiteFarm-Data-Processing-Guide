@@ -6,7 +6,7 @@ When generating dashboard visualizations for numerical variables—such as `farm
 
 ### Visualization-Specific Outlier Handling for Dashboards
 
-When generating dashboard visualizations involving area-related variables—such as `farm_site_area`, `productive_area`, and similar metrics—we apply dynamic outlier filtering based on country and date range. This ensures users receive clean, representative data even in visual summaries.
+When generating dashboard visualizations involving area-related variables—such as `farm_site_area`, `productive_area`, `crop_management_tasks` and similar metrics—we apply dynamic outlier filtering based on country and date range. This ensures users receive clean, representative data even in visual summaries.
 
 ------------------------------------------------------------------------
 
