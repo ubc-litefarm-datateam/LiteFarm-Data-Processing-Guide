@@ -1,4 +1,4 @@
-### Identifying and Managing Outliers in Farm Area and Perimeter Data for Enhanced Analysis
+# Identifying and Managing Outliers in Farm Area and Perimeter Data for Enhanced Analysis
 
 This strategy focuses on systematically identifying and handling outliers in farm area and perimeter data based on country and location type. By calculating and applying well-defined limits, we ensure the dataset's integrity and reliability for producing meaningful insights and visualizations.
 
@@ -34,9 +34,9 @@ Key columns from the dataset:
 
 ------------------------------------------------------------------------
 
-#### **Steps**
+### **Steps**
 
-##### **1. Calculate Descriptive Statistics**
+#### **1. Calculate Descriptive Statistics**
 
 We began by analyzing the minimum, maximum, and mean values for both area and perimeter by location type across all countries. For example:
 
@@ -68,7 +68,7 @@ We began by analyzing the minimum, maximum, and mean values for both area and pe
 
     -   Mean Perimeter: 132.79 m
 
-##### **2. Percentile-Based Thresholds**
+#### **2. Percentile-Based Thresholds**
 
 For each location type within a country, we calculated the 5th percentile (lower cap) and 95th percentile (upper cap) for `total_area_ha` and `total_perimeter_m`. This helped filter out extreme values at both ends of the spectrum. For instance:
 
@@ -92,15 +92,15 @@ For each location type within a country, we calculated the 5th percentile (lower
 
     -   Upper Cap (Perimeter): 206 m
 
-##### **3. Interquartile Range (IQR) Analysis**
+#### **3. Interquartile Range (IQR) Analysis**
 
 To refine our thresholds, we used the IQR method:
 
--   **IQR Formula**: IQR=Q3−Q1\text{IQR} = Q3 - Q1IQR=Q3−Q1
+-   **IQR Formula**: IQR=Q3−Q1
 
-    -   **Lower Bound**: Q1−1.5×IQRQ1 - 1.5 \times \text{IQR}Q1−1.5×IQR (set to 0 if negative).
+    -   **Lower Bound**: Q1−1.5×IQR (set to 0 if negative).
 
-    -   **Upper Bound**: Q3+1.5×IQRQ3 + 1.5 \times \text{IQR}Q3+1.5×IQR.
+    -   **Upper Bound**: Q3+1.5×IQR.
 
 For example:
 
@@ -116,7 +116,7 @@ For example:
 
     -   IQR Perimeter: 27 to 144 m.
 
-##### **4. Merging and Combining Thresholds**
+#### **4. Merging and Combining Thresholds**
 
 We combined percentile-based and IQR-based thresholds to define the final limits:
 
@@ -156,9 +156,43 @@ For example:
 
     -   Fields with area below 0.0017 ha or above 2.08 ha, or perimeter outside the range of 14 m to 947 m.
 
-##### **Overlap Analysis**
+------------------------------------------------------------------------
 
-We identified farms with both valid and outlier location types, such as a valid barn but an outlier field. This provided additional insights into farms with mixed characteristics.
+#### 6. Visualization-Specific Outlier Handling for Dashboards
+
+When generating dashboard visualizations involving area-related variables—such as farm_area, productive_area, and similar metrics—we apply dynamic outlier filtering based on country and date range. This ensures users receive clean, representative data even in visual summaries.
+
+#### Process:
+
+##### Country and Date Filtering:
+
+-   Before plotting, we filter the data based on the selected country and created_at date range.
+
+-   Dynamic IQR Calculation:
+
+-   For each selected country, we calculate the Interquartile Range (IQR) specific to the filtered dataset:
+
+-   Q1 and Q3 are recalculated for the area variables.
+
+##### We compute new IQR bounds:
+
+-   Lower Bound = max(Q1 − 1.5 × IQR, 0)
+
+-   Upper Bound = Q3 + 1.5 × IQR
+
+##### Aggregation for Plotting:
+
+Only farms with values within these dynamically calculated IQR limits are included. This ensures the visualization is not skewed by outliers while preserving as much natural variability as possible.
+
+##### Example:
+
+If the user selects India and a time range of 2022-01-01 to 2023-01-01, the system:
+
+Filters farms created in India during that period.
+
+Computes the IQR-based bounds for productive_area.
+
+Uses only values within those bounds to generate histograms or summary plots.
 
 ------------------------------------------------------------------------
 

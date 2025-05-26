@@ -31,6 +31,9 @@
         "---\n",
         "\n",
         "\n",
+        "\n",
+        "\n",
+        "\n",
         "## 1. Introduction and Motivation\n",
         "\n",
         "In modern agriculture, the geometric features of farmland play a crucial role in farm management and planning. Understanding these characteristics enables farmers to make informed decisions, manage resources more efficiently, and promote sustainable agricultural practices.\n",
@@ -146,7 +149,7 @@
         "\n",
         "To enable meaningful comparisons in the size-and-shape space, each polygon was resampled to have exactly 34 evenly spaced points along its boundary. The following Python function illustrates this process:\n"
       ],
-      "id": "c621f24b"
+      "id": "c323c1f0"
     },
     {
       "cell_type": "code",
@@ -184,7 +187,7 @@
         "from geomstats.geometry.pre_shape import PreShapeSpace\n",
         "from geomstats.visualization import KendallDisk, KendallSphere"
       ],
-      "id": "722f3462",
+      "id": "89f9a752",
       "execution_count": null,
       "outputs": []
     },
@@ -214,7 +217,7 @@
         "    \n",
         "    return new_coords"
       ],
-      "id": "26a2f4c8",
+      "id": "2790174e",
       "execution_count": null,
       "outputs": []
     },
@@ -226,7 +229,7 @@
         "\n",
         "All polygons were standardized to have vertices drawn in the same direction (clockwise or counterclockwise). This step ensures that the orientation of the vertices does not introduce inconsistencies in the analysis.\n"
       ],
-      "id": "8515ceba"
+      "id": "147303ad"
     },
     {
       "cell_type": "code",
@@ -260,7 +263,7 @@
         "        return [coords[0]] + coords[:0:-1]  # Reverse the vertex order, keeping the start point\n",
         "    return coords"
       ],
-      "id": "f64be22c",
+      "id": "db8ccff7",
       "execution_count": null,
       "outputs": []
     },
@@ -294,7 +297,7 @@
         "\n",
         "The **Fréchet Mean**[@dryden2016shape] represents the \"average\" shape in a geometric space (manifold), minimizing the average squared distance to all sample shapes. It serves as a standardized and central representation of the dataset.\n",
         "\n",
-        "----------------------------------------------------------------------\n",
+        "------------------------------------------------------------------------\n",
         "\n",
         "#### Step-by-Step Overview\n",
         "\n",
@@ -307,10 +310,9 @@
         "2.  **Measuring Shape Differences**:\n",
         "    -   The `riemannian_distance` function computes the **Riemannian distance** between two shapes in size-and-shape space. This metric quantifies geometric differences between shapes, considering both size and rotation.\n",
         "\n",
-        "\n",
         "##### Riemannian Distance in Size-and-Shape Space\n",
         "\n",
-        "Given two  $k$-point configurations in $m$-dimensions, $X_1^o, X_2^o \\in \\mathbb{R}^{k \\times m}$, the **Riemannian distance**[@dryden2016shape] in size-and-shape space is defined as:\n",
+        "Given two $k$-point configurations in $m$-dimensions, $X_1^o, X_2^o \\in \\mathbb{R}^{k \\times m}$, the **Riemannian distance**[@dryden2016shape] in size-and-shape space is defined as:\n",
         "\n",
         "$$\n",
         "d_S(X_1^o, X_2^o) = \\sqrt{S_1^2 + S_2^2 - 2 S_1 S_2 \\cos \\rho(X_1^o, X_2^o)}\n",
@@ -318,23 +320,22 @@
         "\n",
         "where:\n",
         "\n",
-        "- $S_1, S_2$: Centroid sizes of $X_1^o$ and $X_2^o$, representing the Frobenius norms of the centered shapes.\n",
+        "-   $S_1, S_2$: Centroid sizes of $X_1^o$ and $X_2^o$, representing the Frobenius norms of the centered shapes.\n",
         "\n",
-        "- $\\rho(X_1^o, X_2^o)$: Riemannian shape distance.\n",
+        "-   $\\rho(X_1^o, X_2^o)$: Riemannian shape distance.\n",
         "\n",
         "This formula ensures that the distance captures both shape similarity and scaling differences, making it a robust tool for geometric analysis.\n",
         "\n",
-        "3. **Iterative Fréchet Mean Calculation**:\n",
-        "   - The algorithm begins with an initial **reference shape** and aligns all other shapes to it using Procrustes alignment. \n",
-        "   - The Fréchet Mean is then calculated as the average shape in Euclidean space.\n",
-        "   - The shapes are iteratively re-aligned to the updated Fréchet Mean, refining the alignment and mean calculation until convergence is achieved.\n",
-        "\n",
+        "3.  **Iterative Fréchet Mean Calculation**:\n",
+        "    -   The algorithm begins with an initial **reference shape** and aligns all other shapes to it using Procrustes alignment.\n",
+        "    -   The Fréchet Mean is then calculated as the average shape in Euclidean space.\n",
+        "    -   The shapes are iteratively re-aligned to the updated Fréchet Mean, refining the alignment and mean calculation until convergence is achieved.\n",
         "\n",
         "#### Python Implementation\n",
         "\n",
         "The following Python code implements the entire process of shape alignment, Riemannian distance computation, and iterative Fréchet Mean calculation.\n"
       ],
-      "id": "b0ae95ea"
+      "id": "afb50371"
     },
     {
       "cell_type": "code",
@@ -443,7 +444,7 @@
         "    else:\n",
         "        previous_frechet_mean_shape = current_frechet_mean_shape"
       ],
-      "id": "1f41b674",
+      "id": "a01d4bd2",
       "execution_count": null,
       "outputs": []
     },
@@ -465,7 +466,7 @@
         "\n",
         "Below are the four field polygons detected as outliers using the global Fréchet mean:\n"
       ],
-      "id": "1130c598"
+      "id": "1d2f3812"
     },
     {
       "cell_type": "code",
@@ -479,7 +480,7 @@
         "# Display the table\n",
         "four_potiential_fake_farm   # Or use `data` to show the entire table"
       ],
-      "id": "a716ddcd",
+      "id": "7453fc28",
       "execution_count": null,
       "outputs": []
     },
@@ -556,7 +557,7 @@
         "\n",
         "### References"
       ],
-      "id": "8479038e"
+      "id": "1762eb19"
     }
   ],
   "metadata": {
@@ -564,7 +565,7 @@
       "name": "python3",
       "language": "python",
       "display_name": "Python 3 (ipykernel)",
-      "path": "/Users/prabhjotsingh/miniconda3/share/jupyter/kernels/python3"
+      "path": "/Users/prabhjotsingh/Library/Python/3.9/share/jupyter/kernels/python3"
     }
   },
   "nbformat": 4,

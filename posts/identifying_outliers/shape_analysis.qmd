@@ -258,7 +258,7 @@ The polygons were aligned using **Procrustes analysis**[@dryden2016shape], and t
 
 The **Fréchet Mean**[@dryden2016shape] represents the "average" shape in a geometric space (manifold), minimizing the average squared distance to all sample shapes. It serves as a standardized and central representation of the dataset.
 
-----------------------------------------------------------------------
+------------------------------------------------------------------------
 
 #### Step-by-Step Overview
 
@@ -271,10 +271,9 @@ The **Fréchet Mean**[@dryden2016shape] represents the "average" shape in a geom
 2.  **Measuring Shape Differences**:
     -   The `riemannian_distance` function computes the **Riemannian distance** between two shapes in size-and-shape space. This metric quantifies geometric differences between shapes, considering both size and rotation.
 
-
 ##### Riemannian Distance in Size-and-Shape Space
 
-Given two  $k$-point configurations in $m$-dimensions, $X_1^o, X_2^o \in \mathbb{R}^{k \times m}$, the **Riemannian distance**[@dryden2016shape] in size-and-shape space is defined as:
+Given two $k$-point configurations in $m$-dimensions, $X_1^o, X_2^o \in \mathbb{R}^{k \times m}$, the **Riemannian distance**[@dryden2016shape] in size-and-shape space is defined as:
 
 $$
 d_S(X_1^o, X_2^o) = \sqrt{S_1^2 + S_2^2 - 2 S_1 S_2 \cos \rho(X_1^o, X_2^o)}
@@ -282,17 +281,16 @@ $$
 
 where:
 
-- $S_1, S_2$: Centroid sizes of $X_1^o$ and $X_2^o$, representing the Frobenius norms of the centered shapes.
+-   $S_1, S_2$: Centroid sizes of $X_1^o$ and $X_2^o$, representing the Frobenius norms of the centered shapes.
 
-- $\rho(X_1^o, X_2^o)$: Riemannian shape distance.
+-   $\rho(X_1^o, X_2^o)$: Riemannian shape distance.
 
 This formula ensures that the distance captures both shape similarity and scaling differences, making it a robust tool for geometric analysis.
 
-3. **Iterative Fréchet Mean Calculation**:
-   - The algorithm begins with an initial **reference shape** and aligns all other shapes to it using Procrustes alignment. 
-   - The Fréchet Mean is then calculated as the average shape in Euclidean space.
-   - The shapes are iteratively re-aligned to the updated Fréchet Mean, refining the alignment and mean calculation until convergence is achieved.
-
+3.  **Iterative Fréchet Mean Calculation**:
+    -   The algorithm begins with an initial **reference shape** and aligns all other shapes to it using Procrustes alignment.
+    -   The Fréchet Mean is then calculated as the average shape in Euclidean space.
+    -   The shapes are iteratively re-aligned to the updated Fréchet Mean, refining the alignment and mean calculation until convergence is achieved.
 
 #### Python Implementation
 
