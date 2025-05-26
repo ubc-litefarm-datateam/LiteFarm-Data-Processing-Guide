@@ -10,7 +10,7 @@ When generating dashboard visualizations involving area-related variables—such
 
 ------------------------------------------------------------------------
 
-### Process:
+### Data Cleaning Process:
 
 ##### Country and Date Filtering:
 
