@@ -76,4 +76,4 @@ We utilized the following data sources:
 
 ## Conclusion
 
-This approach reconciles differences between initial farm locations and actual mapped areas, providing a comprehensive spatial representation of farms. While outlier farms with significant centroid-to-user-location discrepancies are noted, they are still valid entries, representing unique spatial distributions. This refined spatial data improves the accuracy and reliability of analyses involving farm proximity, urban interactions, and geographic diversity.
+This approach reconciles differences between initial farm locations and actual mapped areas, providing a comprehensive spatial representation of farms. While outlier farms with significant centroid-to-user-location discrepancies are noted, they are still valid entries, representing unique spatial distributions. This refined spatial data improves the accuracy and reliability of analyses involving farm proximity, urban interactions, and geographical diversity.
