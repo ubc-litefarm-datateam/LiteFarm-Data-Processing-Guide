@@ -24,7 +24,7 @@ website:
             href: posts/identifying_outliers/farm_on_land_or_water_outlier.qmd
           - text: "Harvest Data Outlier"
             href: posts/identifying_outliers/harvest_data_outlier.qmd
-          - text: "Dashboard Visualizations Data Cleaning"
+          - text: "Data Cleaning for Dashboard Visualizations"
             href: posts/identifying_outliers/dashboard_visualizations_data_cleaning.qmd
           # - text: "Shape Analysis"
           #   href: posts/identifying_outliers/shape_analysis.qmd
