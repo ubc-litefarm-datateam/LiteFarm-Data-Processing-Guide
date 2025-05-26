@@ -129,8 +129,8 @@ ul.task-list li input[type="checkbox"] {
  <span class="dropdown-text">Harvest Data Outlier</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../posts/identifying_outliers/shape_analysis.html">
- <span class="dropdown-text">Shape Analysis</span></a>
+    <a class="dropdown-item" href="../../posts/identifying_outliers/dashboard_visualizations_data_cleaning.html">
+ <span class="dropdown-text">Dashboard Visualizations Data Cleaning</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../posts/identifying_outliers/farm_area_and_perimeter_outliers.html">
@@ -156,8 +156,14 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#identifying-and-managing-outliers-in-farm-area-and-perimeter-data-for-enhanced-analysis" id="toc-identifying-and-managing-outliers-in-farm-area-and-perimeter-data-for-enhanced-analysis" class="nav-link active" data-scroll-target="#identifying-and-managing-outliers-in-farm-area-and-perimeter-data-for-enhanced-analysis">Identifying and Managing Outliers in Farm Area and Perimeter Data for Enhanced Analysis</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -165,11 +171,10 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<section id="identifying-and-managing-outliers-in-farm-area-and-perimeter-data-for-enhanced-analysis" class="level3">
-<h3 class="anchored" data-anchor-id="identifying-and-managing-outliers-in-farm-area-and-perimeter-data-for-enhanced-analysis">Identifying and Managing Outliers in Farm Area and Perimeter Data for Enhanced Analysis</h3>
+<section id="identifying-and-managing-outliers-in-farm-area-and-perimeter-data-for-enhanced-analysis" class="level1">
+<h1>Identifying and Managing Outliers in Farm Area and Perimeter Data for Enhanced Analysis</h1>
 <p>This strategy focuses on systematically identifying and handling outliers in farm area and perimeter data based on country and location type. By calculating and applying well-defined limits, we ensure the dataset’s integrity and reliability for producing meaningful insights and visualizations.</p>
 <hr>
-</section>
 <section id="rationale" class="level3">
 <h3 class="anchored" data-anchor-id="rationale"><strong>Rationale</strong></h3>
 <p>Outliers in area and perimeter data can arise from various sources, such as:</p>
@@ -194,10 +199,11 @@ ul.task-list li input[type="checkbox"] {
 </ul>
 <hr>
 </section>
-<section id="steps" class="level4">
-<h4 class="anchored" data-anchor-id="steps"><strong>Steps</strong></h4>
-<section id="calculate-descriptive-statistics" class="level5">
-<h5 class="anchored" data-anchor-id="calculate-descriptive-statistics"><strong>1. Calculate Descriptive Statistics</strong></h5>
+</section>
+<section id="steps" class="level3">
+<h3 class="anchored" data-anchor-id="steps"><strong>Steps</strong></h3>
+<section id="calculate-descriptive-statistics" class="level4">
+<h4 class="anchored" data-anchor-id="calculate-descriptive-statistics"><strong>1. Calculate Descriptive Statistics</strong></h4>
 <p>We began by analyzing the minimum, maximum, and mean values for both area and perimeter by location type across all countries. For example:</p>
 <ul>
 <li><p><strong>Fields in Brazil</strong>:</p>
@@ -220,8 +226,8 @@ ul.task-list li input[type="checkbox"] {
 </ul></li>
 </ul>
 </section>
-<section id="percentile-based-thresholds" class="level5">
-<h5 class="anchored" data-anchor-id="percentile-based-thresholds"><strong>2. Percentile-Based Thresholds</strong></h5>
+<section id="percentile-based-thresholds" class="level4">
+<h4 class="anchored" data-anchor-id="percentile-based-thresholds"><strong>2. Percentile-Based Thresholds</strong></h4>
 <p>For each location type within a country, we calculated the 5th percentile (lower cap) and 95th percentile (upper cap) for <code>total_area_ha</code> and <code>total_perimeter_m</code>. This helped filter out extreme values at both ends of the spectrum. For instance:</p>
 <ul>
 <li><p><strong>Fields in Japan</strong>:</p>
@@ -240,14 +246,14 @@ ul.task-list li input[type="checkbox"] {
 </ul></li>
 </ul>
 </section>
-<section id="interquartile-range-iqr-analysis" class="level5">
-<h5 class="anchored" data-anchor-id="interquartile-range-iqr-analysis"><strong>3. Interquartile Range (IQR) Analysis</strong></h5>
+<section id="interquartile-range-iqr-analysis" class="level4">
+<h4 class="anchored" data-anchor-id="interquartile-range-iqr-analysis"><strong>3. Interquartile Range (IQR) Analysis</strong></h4>
 <p>To refine our thresholds, we used the IQR method:</p>
 <ul>
-<li><p><strong>IQR Formula</strong>: IQR=Q3−Q1 = Q3 - Q1IQR=Q3−Q1</p>
+<li><p><strong>IQR Formula</strong>: IQR=Q3−Q1</p>
 <ul>
-<li><p><strong>Lower Bound</strong>: Q1−1.5×IQRQ1 - 1.5 Q1−1.5×IQR (set to 0 if negative).</p></li>
-<li><p><strong>Upper Bound</strong>: Q3+1.5×IQRQ3 + 1.5 Q3+1.5×IQR.</p></li>
+<li><p><strong>Lower Bound</strong>: Q1−1.5×IQR (set to 0 if negative).</p></li>
+<li><p><strong>Upper Bound</strong>: Q3+1.5×IQR.</p></li>
 </ul></li>
 </ul>
 <p>For example:</p>
@@ -264,8 +270,8 @@ ul.task-list li input[type="checkbox"] {
 </ul></li>
 </ul>
 </section>
-<section id="merging-and-combining-thresholds" class="level5">
-<h5 class="anchored" data-anchor-id="merging-and-combining-thresholds"><strong>4. Merging and Combining Thresholds</strong></h5>
+<section id="merging-and-combining-thresholds" class="level4">
+<h4 class="anchored" data-anchor-id="merging-and-combining-thresholds"><strong>4. Merging and Combining Thresholds</strong></h4>
 <p>We combined percentile-based and IQR-based thresholds to define the final limits:</p>
 <ul>
 <li><p><strong>Lower Limit</strong>: Maximum of the 5th percentile and the IQR lower bound.</p></li>
@@ -282,7 +288,6 @@ ul.task-list li input[type="checkbox"] {
 </ul></li>
 </ul>
 <hr>
-</section>
 </section>
 <section id="filtering-valid-and-outlier-data" class="level4">
 <h4 class="anchored" data-anchor-id="filtering-valid-and-outlier-data"><strong>5. Filtering Valid and Outlier Data</strong></h4>
@@ -302,27 +307,15 @@ ul.task-list li input[type="checkbox"] {
 <li>Fields with area below 0.0017 ha or above 2.08 ha, or perimeter outside the range of 14 m to 947 m.</li>
 </ul></li>
 </ul>
-<section id="overlap-analysis" class="level5">
-<h5 class="anchored" data-anchor-id="overlap-analysis"><strong>Overlap Analysis</strong></h5>
-<p>We identified farms with both valid and outlier location types, such as a valid barn but an outlier field. This provided additional insights into farms with mixed characteristics.</p>
 <hr>
 </section>
-</section>
-</section>
-<section id="benefits-of-this-strategy" class="level3">
-<h3 class="anchored" data-anchor-id="benefits-of-this-strategy"><strong>Benefits of This Strategy</strong></h3>
-<ul>
-<li><p><strong>Improved Data Quality</strong>: Removes inconsistent and extreme values while preserving valid variability.</p></li>
-<li><p><strong>Country-Specific Analysis</strong>: Tailored limits for each country and location type ensure cultural and geographical context is respected.</p></li>
-<li><p><strong>Enhanced Visualizations</strong>: Clearer trends and relationships after outlier removal.</p></li>
-</ul>
-<hr>
 </section>
 <section id="conclusion" class="level3">
 <h3 class="anchored" data-anchor-id="conclusion"><strong>Conclusion</strong></h3>
 <p>This approach systematically identified and managed outliers in farm area and perimeter data, balancing statistical methods (percentiles, IQR) with practical domain considerations. By merging multiple thresholds, we ensured robust and actionable results, enabling accurate analysis of agricultural patterns across diverse countries and location types.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

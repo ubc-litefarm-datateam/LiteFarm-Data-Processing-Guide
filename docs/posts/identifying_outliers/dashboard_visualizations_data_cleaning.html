@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>farm_on_land_or_water_outlier – LiteFarm Data Processing Guide</title>
+<title>dashboard_visualizations_data_cleaning – LiteFarm Data Processing Guide</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -129,6 +129,10 @@ ul.task-list li input[type="checkbox"] {
  <span class="dropdown-text">Harvest Data Outlier</span></a>
   </li>  
         <li>
+    <a class="dropdown-item" href="../../posts/identifying_outliers/dashboard_visualizations_data_cleaning.html">
+ <span class="dropdown-text">Dashboard Visualizations Data Cleaning</span></a>
+  </li>  
+        <li>
     <a class="dropdown-item" href="../../posts/identifying_outliers/farm_area_and_perimeter_outliers.html">
  <span class="dropdown-text">Farm area and perimeter Outliers</span></a>
   </li>  
@@ -157,15 +161,9 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul class="collapse">
-  <li><a href="#identifying-farms-on-land-or-ocean" id="toc-identifying-farms-on-land-or-ocean" class="nav-link active" data-scroll-target="#identifying-farms-on-land-or-ocean">Identifying Farms on <em>Land or Ocean</em></a>
+  <li><a href="#data-cleaning-for-dashboard-visualizations" id="toc-data-cleaning-for-dashboard-visualizations" class="nav-link active" data-scroll-target="#data-cleaning-for-dashboard-visualizations">Data Cleaning for Dashboard Visualizations</a>
   <ul class="collapse">
-  <li><a href="#rationale" id="toc-rationale" class="nav-link" data-scroll-target="#rationale">Rationale</a></li>
-  <li><a href="#methodology" id="toc-methodology" class="nav-link" data-scroll-target="#methodology">Methodology</a></li>
-  <li><a href="#classification-results" id="toc-classification-results" class="nav-link" data-scroll-target="#classification-results">Classification Results</a></li>
-  <li><a href="#key-observations" id="toc-key-observations" class="nav-link" data-scroll-target="#key-observations">Key Observations</a></li>
-  <li><a href="#benefits-of-this-approach" id="toc-benefits-of-this-approach" class="nav-link" data-scroll-target="#benefits-of-this-approach">Benefits of This Approach</a></li>
-  <li><a href="#considerations" id="toc-considerations" class="nav-link" data-scroll-target="#considerations">Considerations</a></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  <li><a href="#benefits-of-this-strategy" id="toc-benefits-of-this-strategy" class="nav-link" data-scroll-target="#benefits-of-this-strategy">Benefits of This Strategy</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -176,162 +174,58 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<section id="identifying-farms-on-land-or-ocean" class="level1">
-<h1>Identifying Farms on <em>Land or Ocean</em></h1>
-<p>This methodology was implemented to classify farms as being located on land or in the ocean based on their geographic coordinates. This classification aimed to improve the accuracy and reliability of spatial analyses by identifying potential outliers (e.g., farms with invalid locations).</p>
+<section id="data-cleaning-for-dashboard-visualizations" class="level1">
+<h1>Data Cleaning for Dashboard Visualizations</h1>
+<p>When generating dashboard visualizations for numerical variables—such as `farm_area`, `productive_area`, `natural_area`, and others—we apply consistent outlier filtering to ensure accurate and insightful displays. This process uses the Interquartile Range (IQR) method and dynamically adapts based on the selected country and time range.</p>
 <hr>
-<section id="rationale" class="level2">
-<h2 class="anchored" data-anchor-id="rationale">Rationale</h2>
-<p>In the LiteFarm database, some farms have geographic coordinates that place them in unexpected locations, such as oceans or water bodies. While some of these farms are valid (e.g., located on small islands or near coastal boundaries), others may be due to data entry errors or inaccuracies in the mapping process. By identifying and classifying such farms, we aim to:</p>
-<ul>
-<li>Ensure data reliability for spatial and environmental analyses.</li>
-<li>Exclude invalid farms to avoid skewed results.</li>
-<li>Highlight farms near coastlines or on small islands as potential outliers for manual review.</li>
-</ul>
+<section id="visualization-specific-outlier-handling-for-dashboards" class="level3">
+<h3 class="anchored" data-anchor-id="visualization-specific-outlier-handling-for-dashboards">Visualization-Specific Outlier Handling for Dashboards</h3>
+<p>When generating dashboard visualizations involving area-related variables—such as `farm_area`, `productive_area`, and similar metrics—we apply dynamic outlier filtering based on country and date range. This ensures users receive clean, representative data even in visual summaries.</p>
 <hr>
 </section>
-<section id="methodology" class="level2">
-<h2 class="anchored" data-anchor-id="methodology">Methodology</h2>
-<section id="data-extraction" class="level3">
-<h3 class="anchored" data-anchor-id="data-extraction">1. <strong>Data Extraction</strong></h3>
+<section id="process" class="level3">
+<h3 class="anchored" data-anchor-id="process">Process:</h3>
+<section id="country-and-date-filtering" class="level5">
+<h5 class="anchored" data-anchor-id="country-and-date-filtering">Country and Date Filtering:</h5>
+<p>Before plotting, we filter the data based on the selected `country` and `created_at` date range.</p>
+</section>
+<section id="dynamic-iqr-calculation" class="level5">
+<h5 class="anchored" data-anchor-id="dynamic-iqr-calculation">Dynamic IQR Calculation:</h5>
 <ul>
-<li>The farm data was extracted from the LiteFarm database using an SQL query.</li>
-<li>Filters were applied to exclude test farms and known “fake” farms, ensuring only genuine records were analyzed.</li>
-<li>Key attributes included:
-<ul>
-<li><strong><code>farm_id</code></strong>: Unique identifier for each farm.</li>
-<li><strong><code>farm_name</code></strong>: Name of the farm.</li>
-<li><strong><code>country_name</code></strong>: Country where the farm is located.</li>
-<li><strong><code>grid_points</code></strong>: Latitude and longitude coordinates representing the farm’s location.</li>
-</ul></li>
+<li><p>For each selected country, we calculate the Interquartile Range (IQR) specific to the filtered dataset.</p></li>
+<li><p>Q1 and Q3 are recalculated for the relevant numerical variables.</p></li>
 </ul>
 </section>
-<section id="landwater-classification" class="level3">
-<h3 class="anchored" data-anchor-id="landwater-classification">2. <strong>Land/Water Classification</strong></h3>
+<section id="we-compute-new-iqr-bounds" class="level4">
+<h4 class="anchored" data-anchor-id="we-compute-new-iqr-bounds">We compute new IQR bounds:</h4>
 <ul>
-<li>The <strong>Natural Earth 10m Land Dataset</strong> (<code>ne_10m_land.shp</code>) was used for high-resolution land boundary data.</li>
-<li>Using the <code>geopandas</code> library, the following steps were performed:
-<ul>
-<li><strong>Point-in-Polygon Check</strong>: Each farm’s <code>grid_points</code> were converted into geographic points. These points were tested against the land polygons to determine if they fall within a land boundary.</li>
-<li><strong>Classification</strong>: Farms were labeled as:
-<ul>
-<li><strong>“Land”</strong>: If the point fell inside a land polygon.</li>
-<li><strong>“Ocean”</strong>: If the point fell outside all land polygons.</li>
-</ul></li>
-</ul></li>
+<li><p>Lower Bound = max(Q1 − 1.5 × IQR, 0)</p></li>
+<li><p>Upper Bound = Q3 + 1.5 × IQR</p></li>
 </ul>
 </section>
-<section id="enhancing-accuracy-with-buffers" class="level3">
-<h3 class="anchored" data-anchor-id="enhancing-accuracy-with-buffers">3. <strong>Enhancing Accuracy with Buffers</strong></h3>
-<ul>
-<li>A buffer of 1000 meters was added around each farm’s point to account for:
-<ul>
-<li>Minor inaccuracies in land boundary data.</li>
-<li>Limited precision in geographic coordinates.</li>
-</ul></li>
-<li>If the buffered point intersected a land polygon, the farm was classified as <strong>“Land”</strong>; otherwise, it was classified as <strong>“Ocean”</strong>.</li>
-</ul>
+<section id="aggregation-for-plotting" class="level4">
+<h4 class="anchored" data-anchor-id="aggregation-for-plotting">Aggregation for Plotting:</h4>
+<p>Only farms with values within these dynamically calculated IQR limits are included. This ensures the visualization is not skewed by outliers while preserving as much natural variability as possible.</p>
+<hr>
 </section>
-<section id="outlier-detection" class="level3">
-<h3 class="anchored" data-anchor-id="outlier-detection">4. <strong>Outlier Detection</strong></h3>
+<section id="example" class="level4">
+<h4 class="anchored" data-anchor-id="example">Example:</h4>
+<p>If the user selects <strong>India</strong> and a time range of <strong>2022-01-01 to 2023-01-01</strong>, the system:</p>
 <ul>
-<li>Farms labeled as <strong>“Ocean”</strong> were flagged as potential outliers.</li>
-<li>These farms were compiled into a separate dataset for further inspection, as their locations were not expected to represent valid farm locations.</li>
-</ul>
-</section>
-<section id="validation-and-manual-inspection" class="level3">
-<h3 class="anchored" data-anchor-id="validation-and-manual-inspection">5. <strong>Validation and Manual Inspection</strong></h3>
-<ul>
-<li>The flagged farms were manually inspected using the <strong>Farm Explorer</strong> tab on the LiteFarm dashboard to verify their actual locations.</li>
-<li>Farms that appeared to be valid (e.g., located on small islands or very close to the coast) were confirmed as legitimate but still classified as outliers due to:
-<ul>
-<li>Their small size or unusual location.</li>
-<li>Potential for producing skewed results in broader analyses.</li>
-</ul></li>
-</ul>
-</section>
-<section id="updating-the-sql-query" class="level3">
-<h3 class="anchored" data-anchor-id="updating-the-sql-query">6. <strong>Updating the SQL Query</strong></h3>
-<ul>
-<li>Farms confirmed to lie in the ocean (i.e., invalid farms) were excluded from the dataset by adding their <code>farm_id</code> values to an exclusion list in the SQL query.</li>
-<li>This updated query ensures that all subsequent analyses and operations exclude invalid farms, improving the reliability of the dataset.</li>
+<li><p>Filters farms created in India during that period.</p></li>
+<li><p>Computes the IQR-based bounds for `productive_area`.</p></li>
+<li><p>Uses only values within those bounds to generate histograms or summary plots.</p></li>
 </ul>
 <hr>
 </section>
 </section>
-<section id="classification-results" class="level2">
-<h2 class="anchored" data-anchor-id="classification-results">Classification Results</h2>
+<section id="benefits-of-this-strategy" class="level2">
+<h2 class="anchored" data-anchor-id="benefits-of-this-strategy">Benefits of This Strategy</h2>
 <ul>
-<li><strong>Land Farms</strong>:
-<ul>
-<li>Farms that fell within land polygons or whose buffered points intersected land boundaries.</li>
-</ul></li>
-<li><strong>Ocean Farms</strong>:
-<ul>
-<li>Farms that fell outside land polygons and could not be confirmed as valid locations through manual inspection.</li>
-</ul></li>
+<li><p><strong>Improved Data Quality</strong>: Removes inconsistent and extreme values while preserving valid variability.</p></li>
+<li><p><strong>Country-Specific Analysis</strong>: Tailored limits for each country and location type ensure cultural and geographical context is respected.</p></li>
+<li><p><strong>Enhanced Visualizations</strong>: Clearer trends and relationships after outlier removal.</p></li>
 </ul>
-<hr>
-</section>
-<section id="key-observations" class="level2">
-<h2 class="anchored" data-anchor-id="key-observations">Key Observations</h2>
-<ol type="1">
-<li><strong>Valid Farms in the Ocean</strong>:
-<ul>
-<li>Some farms initially classified as “Ocean” were located on small islands or near coastal boundaries.</li>
-<li>These farms were valid but flagged as outliers due to their geographic characteristics.</li>
-</ul></li>
-<li><strong>Impact on Analyses</strong>:
-<ul>
-<li>Excluding farms classified as “Ocean” ensures cleaner and more reliable data for spatial analyses.</li>
-<li>However, valid farms near coastlines or on small islands may require separate consideration for specific analyses.</li>
-</ul></li>
-<li><strong>Outliers</strong>:
-<ul>
-<li>Farms in unusual locations (e.g., small islands or coastal areas) may produce skewed results in broader spatial analyses, especially when analyzing trends by proximity to metropolitan areas or landmass sizes.</li>
-</ul></li>
-</ol>
-<hr>
-</section>
-<section id="benefits-of-this-approach" class="level2">
-<h2 class="anchored" data-anchor-id="benefits-of-this-approach">Benefits of This Approach</h2>
-<ul>
-<li><strong>Improved Data Integrity</strong>:
-<ul>
-<li>Ensures only valid farms are included in the dataset.</li>
-</ul></li>
-<li><strong>Accurate Spatial Analysis</strong>:
-<ul>
-<li>Distinguishes between farms on land and those in unexpected locations, improving analysis reliability.</li>
-</ul></li>
-<li><strong>Identifies Edge Cases</strong>:
-<ul>
-<li>Highlights farms near coastlines or on small islands for manual inspection and further analysis.</li>
-</ul></li>
-</ul>
-<hr>
-</section>
-<section id="considerations" class="level2">
-<h2 class="anchored" data-anchor-id="considerations">Considerations</h2>
-<ul>
-<li><strong>Coastal Farms</strong>:
-<ul>
-<li>Farms near coastlines or on small islands are valid but may require separate handling in analyses.</li>
-</ul></li>
-<li><strong>Boundary Precision</strong>:
-<ul>
-<li>The resolution of the land boundary dataset and the buffer size can influence classification results.</li>
-</ul></li>
-<li><strong>Manual Validation</strong>:
-<ul>
-<li>While effective, manual inspection is time-consuming and may not scale to larger datasets.</li>
-</ul></li>
-</ul>
-<hr>
-</section>
-<section id="conclusion" class="level2">
-<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>By classifying farms as being located on land or in the ocean, this methodology enhances the reliability of spatial analyses and identifies outliers for further inspection. Farms near coastlines or on small islands are valid but remain flagged as outliers to ensure data consistency and accuracy in broader analyses. This process ensures cleaner, more reliable data for understanding the spatial characteristics of farms in the LiteFarm dataset.</p>
 
 
 </section>

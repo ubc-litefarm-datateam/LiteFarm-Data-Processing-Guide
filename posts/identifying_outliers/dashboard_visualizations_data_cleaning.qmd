@@ -1,0 +1,55 @@
+# Data Cleaning for Dashboard Visualizations
+
+When generating dashboard visualizations for numerical variables—such as `farm_site_area`, `productive_area`, `natural_area`, and others—we apply consistent outlier filtering to ensure accurate and insightful displays. This process uses the Interquartile Range (IQR) method and dynamically adapts based on the selected country and time range.
+
+------------------------------------------------------------------------
+
+### Visualization-Specific Outlier Handling for Dashboards
+
+When generating dashboard visualizations involving area-related variables—such as `farm_site_area`, `productive_area`, and similar metrics—we apply dynamic outlier filtering based on country and date range. This ensures users receive clean, representative data even in visual summaries.
+
+------------------------------------------------------------------------
+
+### Process:
+
+##### Country and Date Filtering:
+
+Before plotting, we filter the data based on the selected `country` and `date` range.
+
+##### Dynamic IQR Calculation:
+
+-   For each selected country, we calculate the Interquartile Range (IQR) specific to the filtered dataset.
+
+-   Q1 and Q3 are recalculated for the relevant numerical variables.
+
+#### We compute new IQR bounds:
+
+-   Lower Bound = max(Q1 − 1.5 × IQR, 0)
+
+-   Upper Bound = Q3 + 1.5 × IQR
+
+#### Aggregation for Plotting:
+
+Only farms with values within these dynamically calculated IQR limits are included. This ensures the visualization is not skewed by outliers while preserving as much natural variability as possible.
+
+------------------------------------------------------------------------
+
+#### Example:
+
+If the user selects **India** and a time range of **2022-01-01 to 2023-01-01**, the system:
+
+-   Filters farms created in India during that period.
+
+-   Computes the IQR-based bounds for `productive_area`.
+
+-   Uses only values within those bounds to generate histograms or summary plots.
+
+------------------------------------------------------------------------
+
+## Benefits of This Strategy
+
+-   **Improved Data Quality**: Removes inconsistent and extreme values while preserving valid variability.
+
+-   **Country-Specific Analysis**: Tailored limits for each country and location type ensure cultural and geographical context is respected.
+
+-   **Enhanced Visualizations**: Clearer trends and relationships after outlier removal.
