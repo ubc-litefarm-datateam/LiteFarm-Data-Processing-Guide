@@ -130,7 +130,7 @@ ul.task-list li input[type="checkbox"] {
   </li>  
         <li>
     <a class="dropdown-item" href="../../posts/identifying_outliers/dashboard_visualizations_data_cleaning.html">
- <span class="dropdown-text">Dashboard Visualizations Data Cleaning</span></a>
+ <span class="dropdown-text">Data Cleaning for Dashboard Visualizations</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../posts/identifying_outliers/farm_area_and_perimeter_outliers.html">
@@ -176,18 +176,18 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="data-cleaning-for-dashboard-visualizations" class="level1">
 <h1>Data Cleaning for Dashboard Visualizations</h1>
-<p>When generating dashboard visualizations for numerical variables—such as `farm_area`, `productive_area`, `natural_area`, and others—we apply consistent outlier filtering to ensure accurate and insightful displays. This process uses the Interquartile Range (IQR) method and dynamically adapts based on the selected country and time range.</p>
+<p>When generating dashboard visualizations for numerical variables—such as <code>farm_site_area</code>, <code>productive_area</code>, <code>natural_area</code>, and others—we apply consistent outlier filtering to ensure accurate and insightful displays. This process uses the Interquartile Range (IQR) method and dynamically adapts based on the selected country and time range.</p>
 <hr>
 <section id="visualization-specific-outlier-handling-for-dashboards" class="level3">
 <h3 class="anchored" data-anchor-id="visualization-specific-outlier-handling-for-dashboards">Visualization-Specific Outlier Handling for Dashboards</h3>
-<p>When generating dashboard visualizations involving area-related variables—such as `farm_area`, `productive_area`, and similar metrics—we apply dynamic outlier filtering based on country and date range. This ensures users receive clean, representative data even in visual summaries.</p>
+<p>When generating dashboard visualizations involving area-related variables—such as <code>farm_site_area</code>, <code>productive_area</code>, <code>crop_management_tasks</code> and similar metrics—we apply dynamic outlier filtering based on country and date range. This ensures users receive clean, representative data even in visual summaries.</p>
 <hr>
 </section>
-<section id="process" class="level3">
-<h3 class="anchored" data-anchor-id="process">Process:</h3>
+<section id="data-cleaning-process" class="level3">
+<h3 class="anchored" data-anchor-id="data-cleaning-process">Data Cleaning Process:</h3>
 <section id="country-and-date-filtering" class="level5">
 <h5 class="anchored" data-anchor-id="country-and-date-filtering">Country and Date Filtering:</h5>
-<p>Before plotting, we filter the data based on the selected `country` and `created_at` date range.</p>
+<p>Before plotting, we filter the data based on the selected <code>country</code> and <code>date</code> range.</p>
 </section>
 <section id="dynamic-iqr-calculation" class="level5">
 <h5 class="anchored" data-anchor-id="dynamic-iqr-calculation">Dynamic IQR Calculation:</h5>
@@ -213,7 +213,7 @@ ul.task-list li input[type="checkbox"] {
 <p>If the user selects <strong>India</strong> and a time range of <strong>2022-01-01 to 2023-01-01</strong>, the system:</p>
 <ul>
 <li><p>Filters farms created in India during that period.</p></li>
-<li><p>Computes the IQR-based bounds for `productive_area`.</p></li>
+<li><p>Computes the IQR-based bounds for <code>productive_area</code>.</p></li>
 <li><p>Uses only values within those bounds to generate histograms or summary plots.</p></li>
 </ul>
 <hr>
