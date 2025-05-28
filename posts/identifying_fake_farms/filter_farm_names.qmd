@@ -37,7 +37,7 @@ WHERE LOWER(f.farm_name) LIKE '%fake%'
 -   **hola**: Spanish for "hello," possibly used as a default or test entry.
 -   **delete, none, n/a**: Entries that may have been marked for deletion or indicate missing data.
 -   **wrong**: Indicates an incorrect or placeholder entry.
--   **litefarm**: Might be used as a default name within the system or during demonstrations.
+-   **Litefarm**: Might be used as a default name within the system or during demonstrations.
 
 The `LOWER()` function ensures the query is case-insensitive, capturing variations like "Test" and "test."
 
