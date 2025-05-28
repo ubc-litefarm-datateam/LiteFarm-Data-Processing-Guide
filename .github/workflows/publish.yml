@@ -27,10 +27,9 @@ jobs:
       - name: Render Quarto Site
         run: quarto render
 
-      - name: Commit rendered docs
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
-          git add docs/
-          git commit -m "Render site" || echo "No changes to commit"
-          git push
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.QUARTO_TOKEN }}
+          publish_dir: ./docs
+
