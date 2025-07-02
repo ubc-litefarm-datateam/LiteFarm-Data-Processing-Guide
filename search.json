@@ -1,5 +1,173 @@
 [
   {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About This Project",
+    "section": "",
+    "text": "About the Farm Validation Project\nThe Farm Validation Project aims to: - Detect invalid or fake farms using advanced validation techniques. - Remove outliers to ensure unbiased and interpretable data visualizations.\nThis project is part of our initiative to create reliable datasets for decision-making and analytics.\nFor more information, visit the GitHub repository."
+  },
+  {
+    "objectID": "posts/identifying_outliers/farm_on_land_or_water_outlier.html",
+    "href": "posts/identifying_outliers/farm_on_land_or_water_outlier.html",
+    "title": "Identifying Farms on Land or Ocean",
+    "section": "",
+    "text": "This methodology was implemented to classify farms as being located on land or in the ocean based on their geographic coordinates. This classification aimed to improve the accuracy and reliability of spatial analyses by identifying potential outliers (e.g., farms with invalid locations).\n\n\n\nIn the LiteFarm database, some farms have geographic coordinates that place them in unexpected locations, such as oceans or water bodies. While some of these farms are valid (e.g., located on small islands or near coastal boundaries), others may be due to data entry errors or inaccuracies in the mapping process. By identifying and classifying such farms, we aim to:\n\nEnsure data reliability for spatial and environmental analyses.\nExclude invalid farms to avoid skewed results.\nHighlight farms near coastlines or on small islands as potential outliers for manual review.\n\n\n\n\n\n\n\n\nThe farm data was extracted from the LiteFarm database using an SQL query.\nFilters were applied to exclude test farms and known “fake” farms, ensuring only genuine records were analyzed.\nKey attributes included:\n\nfarm_id: Unique identifier for each farm.\nfarm_name: Name of the farm.\ncountry_name: Country where the farm is located.\ngrid_points: Latitude and longitude coordinates representing the farm’s location.\n\n\n\n\n\n\nThe Natural Earth 10m Land Dataset (ne_10m_land.shp) was used for high-resolution land boundary data.\nUsing the geopandas library, the following steps were performed:\n\nPoint-in-Polygon Check: Each farm’s grid_points were converted into geographic points. These points were tested against the land polygons to determine if they fall within a land boundary.\nClassification: Farms were labeled as:\n\n“Land”: If the point fell inside a land polygon.\n“Ocean”: If the point fell outside all land polygons.\n\n\n\n\n\n\n\nA buffer of 1000 meters was added around each farm’s point to account for:\n\nMinor inaccuracies in land boundary data.\nLimited precision in geographic coordinates.\n\nIf the buffered point intersected a land polygon, the farm was classified as “Land”; otherwise, it was classified as “Ocean”.\n\n\n\n\n\nFarms labeled as “Ocean” were flagged as potential outliers.\nThese farms were compiled into a separate dataset for further inspection, as their locations were not expected to represent valid farm locations.\n\n\n\n\n\nThe flagged farms were manually inspected using the Farm Explorer tab on the LiteFarm dashboard to verify their actual locations.\nFarms that appeared to be valid (e.g., located on small islands or very close to the coast) were confirmed as legitimate but still classified as outliers due to:\n\nTheir small size or unusual location.\nPotential for producing skewed results in broader analyses.\n\n\n\n\n\n\nFarms confirmed to lie in the ocean (i.e., invalid farms) were excluded from the dataset by adding their farm_id values to an exclusion list in the SQL query.\nThis updated query ensures that all subsequent analyses and operations exclude invalid farms, improving the reliability of the dataset.\n\n\n\n\n\n\n\nLand Farms:\n\nFarms that fell within land polygons or whose buffered points intersected land boundaries.\n\nOcean Farms:\n\nFarms that fell outside land polygons and could not be confirmed as valid locations through manual inspection.\n\n\n\n\n\n\n\nValid Farms in the Ocean:\n\nSome farms initially classified as “Ocean” were located on small islands or near coastal boundaries.\nThese farms were valid but flagged as outliers due to their geographic characteristics.\n\nImpact on Analyses:\n\nExcluding farms classified as “Ocean” ensures cleaner and more reliable data for spatial analyses.\nHowever, valid farms near coastlines or on small islands may require separate consideration for specific analyses.\n\nOutliers:\n\nFarms in unusual locations (e.g., small islands or coastal areas) may produce skewed results in broader spatial analyses, especially when analyzing trends by proximity to metropolitan areas or landmass sizes.\n\n\n\n\n\n\n\nImproved Data Integrity:\n\nEnsures only valid farms are included in the dataset.\n\nAccurate Spatial Analysis:\n\nDistinguishes between farms on land and those in unexpected locations, improving analysis reliability.\n\nIdentifies Edge Cases:\n\nHighlights farms near coastlines or on small islands for manual inspection and further analysis.\n\n\n\n\n\n\n\nCoastal Farms:\n\nFarms near coastlines or on small islands are valid but may require separate handling in analyses.\n\nBoundary Precision:\n\nThe resolution of the land boundary dataset and the buffer size can influence classification results.\n\nManual Validation:\n\nWhile effective, manual inspection is time-consuming and may not scale to larger datasets.\n\n\n\n\n\n\nBy classifying farms as being located on land or in the ocean, this methodology enhances the reliability of spatial analyses and identifies outliers for further inspection. Farms near coastlines or on small islands are valid but remain flagged as outliers to ensure data consistency and accuracy in broader analyses. This process ensures cleaner, more reliable data for understanding the spatial characteristics of farms in the LiteFarm dataset."
+  },
+  {
+    "objectID": "posts/identifying_outliers/farm_on_land_or_water_outlier.html#rationale",
+    "href": "posts/identifying_outliers/farm_on_land_or_water_outlier.html#rationale",
+    "title": "Identifying Farms on Land or Ocean",
+    "section": "",
+    "text": "In the LiteFarm database, some farms have geographic coordinates that place them in unexpected locations, such as oceans or water bodies. While some of these farms are valid (e.g., located on small islands or near coastal boundaries), others may be due to data entry errors or inaccuracies in the mapping process. By identifying and classifying such farms, we aim to:\n\nEnsure data reliability for spatial and environmental analyses.\nExclude invalid farms to avoid skewed results.\nHighlight farms near coastlines or on small islands as potential outliers for manual review."
+  },
+  {
+    "objectID": "posts/identifying_outliers/farm_on_land_or_water_outlier.html#methodology",
+    "href": "posts/identifying_outliers/farm_on_land_or_water_outlier.html#methodology",
+    "title": "Identifying Farms on Land or Ocean",
+    "section": "",
+    "text": "The farm data was extracted from the LiteFarm database using an SQL query.\nFilters were applied to exclude test farms and known “fake” farms, ensuring only genuine records were analyzed.\nKey attributes included:\n\nfarm_id: Unique identifier for each farm.\nfarm_name: Name of the farm.\ncountry_name: Country where the farm is located.\ngrid_points: Latitude and longitude coordinates representing the farm’s location.\n\n\n\n\n\n\nThe Natural Earth 10m Land Dataset (ne_10m_land.shp) was used for high-resolution land boundary data.\nUsing the geopandas library, the following steps were performed:\n\nPoint-in-Polygon Check: Each farm’s grid_points were converted into geographic points. These points were tested against the land polygons to determine if they fall within a land boundary.\nClassification: Farms were labeled as:\n\n“Land”: If the point fell inside a land polygon.\n“Ocean”: If the point fell outside all land polygons.\n\n\n\n\n\n\n\nA buffer of 1000 meters was added around each farm’s point to account for:\n\nMinor inaccuracies in land boundary data.\nLimited precision in geographic coordinates.\n\nIf the buffered point intersected a land polygon, the farm was classified as “Land”; otherwise, it was classified as “Ocean”.\n\n\n\n\n\nFarms labeled as “Ocean” were flagged as potential outliers.\nThese farms were compiled into a separate dataset for further inspection, as their locations were not expected to represent valid farm locations.\n\n\n\n\n\nThe flagged farms were manually inspected using the Farm Explorer tab on the LiteFarm dashboard to verify their actual locations.\nFarms that appeared to be valid (e.g., located on small islands or very close to the coast) were confirmed as legitimate but still classified as outliers due to:\n\nTheir small size or unusual location.\nPotential for producing skewed results in broader analyses.\n\n\n\n\n\n\nFarms confirmed to lie in the ocean (i.e., invalid farms) were excluded from the dataset by adding their farm_id values to an exclusion list in the SQL query.\nThis updated query ensures that all subsequent analyses and operations exclude invalid farms, improving the reliability of the dataset."
+  },
+  {
+    "objectID": "posts/identifying_outliers/farm_on_land_or_water_outlier.html#classification-results",
+    "href": "posts/identifying_outliers/farm_on_land_or_water_outlier.html#classification-results",
+    "title": "Identifying Farms on Land or Ocean",
+    "section": "",
+    "text": "Land Farms:\n\nFarms that fell within land polygons or whose buffered points intersected land boundaries.\n\nOcean Farms:\n\nFarms that fell outside land polygons and could not be confirmed as valid locations through manual inspection."
+  },
+  {
+    "objectID": "posts/identifying_outliers/farm_on_land_or_water_outlier.html#key-observations",
+    "href": "posts/identifying_outliers/farm_on_land_or_water_outlier.html#key-observations",
+    "title": "Identifying Farms on Land or Ocean",
+    "section": "",
+    "text": "Valid Farms in the Ocean:\n\nSome farms initially classified as “Ocean” were located on small islands or near coastal boundaries.\nThese farms were valid but flagged as outliers due to their geographic characteristics.\n\nImpact on Analyses:\n\nExcluding farms classified as “Ocean” ensures cleaner and more reliable data for spatial analyses.\nHowever, valid farms near coastlines or on small islands may require separate consideration for specific analyses.\n\nOutliers:\n\nFarms in unusual locations (e.g., small islands or coastal areas) may produce skewed results in broader spatial analyses, especially when analyzing trends by proximity to metropolitan areas or landmass sizes."
+  },
+  {
+    "objectID": "posts/identifying_outliers/farm_on_land_or_water_outlier.html#benefits-of-this-approach",
+    "href": "posts/identifying_outliers/farm_on_land_or_water_outlier.html#benefits-of-this-approach",
+    "title": "Identifying Farms on Land or Ocean",
+    "section": "",
+    "text": "Improved Data Integrity:\n\nEnsures only valid farms are included in the dataset.\n\nAccurate Spatial Analysis:\n\nDistinguishes between farms on land and those in unexpected locations, improving analysis reliability.\n\nIdentifies Edge Cases:\n\nHighlights farms near coastlines or on small islands for manual inspection and further analysis."
+  },
+  {
+    "objectID": "posts/identifying_outliers/farm_on_land_or_water_outlier.html#considerations",
+    "href": "posts/identifying_outliers/farm_on_land_or_water_outlier.html#considerations",
+    "title": "Identifying Farms on Land or Ocean",
+    "section": "",
+    "text": "Coastal Farms:\n\nFarms near coastlines or on small islands are valid but may require separate handling in analyses.\n\nBoundary Precision:\n\nThe resolution of the land boundary dataset and the buffer size can influence classification results.\n\nManual Validation:\n\nWhile effective, manual inspection is time-consuming and may not scale to larger datasets."
+  },
+  {
+    "objectID": "posts/identifying_outliers/farm_on_land_or_water_outlier.html#conclusion",
+    "href": "posts/identifying_outliers/farm_on_land_or_water_outlier.html#conclusion",
+    "title": "Identifying Farms on Land or Ocean",
+    "section": "",
+    "text": "By classifying farms as being located on land or in the ocean, this methodology enhances the reliability of spatial analyses and identifies outliers for further inspection. Farms near coastlines or on small islands are valid but remain flagged as outliers to ensure data consistency and accuracy in broader analyses. This process ensures cleaner, more reliable data for understanding the spatial characteristics of farms in the LiteFarm dataset."
+  },
+  {
+    "objectID": "posts/identifying_outliers/dashboard_visualizations_data_cleaning.html",
+    "href": "posts/identifying_outliers/dashboard_visualizations_data_cleaning.html",
+    "title": "Data Cleaning for Dashboard Visualizations",
+    "section": "",
+    "text": "When generating dashboard visualizations for numerical variables—such as farm_site_area, productive_area, natural_area, and others—we apply consistent outlier filtering to ensure accurate and insightful displays. This process uses the Interquartile Range (IQR) method and dynamically adapts based on the selected country and time range.\n\n\n\nWhen generating dashboard visualizations involving area-related variables—such as farm_site_area, productive_area, crop_management_tasks and similar metrics—we apply dynamic outlier filtering based on country and date range. This ensures users receive clean, representative data even in visual summaries.\n\n\n\n\n\n\nBefore plotting, we filter the data based on the selected country and date range.\n\n\n\n\nFor each selected country, we calculate the Interquartile Range (IQR) specific to the filtered dataset.\nQ1 and Q3 are recalculated for the relevant numerical variables.\n\n\n\n\n\nLower Bound = max(Q1 − 1.5 × IQR, 0)\nUpper Bound = Q3 + 1.5 × IQR\n\n\n\n\nOnly farms with values within these dynamically calculated IQR limits are included. This ensures the visualization is not skewed by outliers while preserving as much natural variability as possible.\n\n\n\n\nIf the user selects India and a time range of 2022-01-01 to 2023-01-01, the system:\n\nFilters farms created in India during that period.\nComputes the IQR-based bounds for productive_area.\nUses only values within those bounds to generate histograms or summary plots.\n\n\n\n\n\n\n\nImproved Data Quality: Removes inconsistent and extreme values while preserving valid variability.\nCountry-Specific Analysis: Tailored limits for each country and location type ensure cultural and geographical context is respected.\nEnhanced Visualizations: Clearer trends and relationships after outlier removal."
+  },
+  {
+    "objectID": "posts/identifying_outliers/dashboard_visualizations_data_cleaning.html#benefits-of-this-strategy",
+    "href": "posts/identifying_outliers/dashboard_visualizations_data_cleaning.html#benefits-of-this-strategy",
+    "title": "Data Cleaning for Dashboard Visualizations",
+    "section": "",
+    "text": "Improved Data Quality: Removes inconsistent and extreme values while preserving valid variability.\nCountry-Specific Analysis: Tailored limits for each country and location type ensure cultural and geographical context is respected.\nEnhanced Visualizations: Clearer trends and relationships after outlier removal."
+  },
+  {
+    "objectID": "posts/identifying_outliers/farm_centroid_outliers.html",
+    "href": "posts/identifying_outliers/farm_centroid_outliers.html",
+    "title": "Calculating Farm Area and Centroid for Enhanced Spatial Analysis",
+    "section": "",
+    "text": "This strategy helps to calculate the total area of farms and determine their precise centroid coordinates. This approach addresses discrepancies between the farm’s initial location and the actual mapped areas within the farm, enhancing the reliability of spatial analyses.\n\n\n\nWhen users create a farm, they can set the farm’s location by providing an address, entering coordinates, or dropping a pin on the map. However, during the mapping workflow, users might draw the farm map (fields, gardens, etc.) in separate or multiple locations. This discrepancy can lead to significant differences between the initially set location and the actual mapped areas.\nWe observed instances where the centroid calculated from mapped areas and the user-provided location differed by over 25 km. While this does not indicate fraudulent farm entries, it highlights cases where multiple significant locations (e.g., fields, gardens) were grouped under one farm name and farm ID.\nThese discrepancies can impact spatial analyses, such as identifying the closest metropolitan area to a farm, evaluating farm diversity, or assessing environmental influences.\n\n\n\n\n\n\nWe utilized the following data sources:\n\nFarm Data: General information about the farm, including user-inputted grid points.\nMapped Areas: Polygon data representing fields, gardens, and other regions within the farm.\nLocation Data: Associated coordinates of mapped farm areas.\n\n\n\n\n\nParse Coordinates:\n\nConvert any string representations of coordinates into a structured list for further analysis.\n\nCompute Centroid:\n\nCalculate the centroid for areas marked as “Farm Site Boundary” if available.\nIf no “Farm Site Boundary” exists, aggregate coordinates from all mapped areas (e.g., fields, gardens) to compute a cumulative centroid.\n\nDistance Analysis:\n\nCompare the centroid of the mapped areas with the initial user-provided location (grid_points).\nCalculate distances between these two points using geospatial methods and classify farms based on proximity:\n\nWithin 500m, 1km, 5km, 10km, and 15km.\nBeyond 15km and 25km.\n\n\nData Output:\n\nGenerate a refined dataset containing the farm ID, centroid coordinates, user-provided grid points, and calculated distances.\n\n\n\n\n\n\n\n\nCentroid Discrepancy:\n\nSome farms showed centroid-to-user-location distances exceeding 25 km.\nThis indicates that users grouped multiple separate significant areas under a single farm ID.\n\nOutlier Farms:\n\nFarms with large discrepancies between their centroid and user-provided locations were flagged as outliers.\nThese farms are not considered fraudulent but represent unique cases with dispersed mapped areas.\n\n\n\n\n\n\n\nImproved Spatial Accuracy:\n\nAllows for precise identification of farm locations based on actual mapped areas.\n\nFlexible Analysis Options:\n\nEnables researchers to select either user-provided coordinates or computed centroids, depending on the analysis.\n\nEnhanced Data Integrity:\n\nHighlights outlier cases for further review, ensuring better understanding of farm spatial distributions.\n\n\n\n\n\n\n\nData Quality:\n\nRelies on accurate user mappings. Errors in mapped data can affect the centroid calculations.\n\nOutlier Handling:\n\nOutlier farms may require manual review for specific analyses.\n\nComputational Resources:\n\nHandling large datasets with complex geometries may require significant computational power.\n\n\n\n\n\n\nThis approach reconciles differences between initial farm locations and actual mapped areas, providing a comprehensive spatial representation of farms. While outlier farms with significant centroid-to-user-location discrepancies are noted, they are still valid entries, representing unique spatial distributions. This refined spatial data improves the accuracy and reliability of analyses involving farm proximity, urban interactions, and geographical diversity."
+  },
+  {
+    "objectID": "posts/identifying_outliers/farm_centroid_outliers.html#rationale",
+    "href": "posts/identifying_outliers/farm_centroid_outliers.html#rationale",
+    "title": "Calculating Farm Area and Centroid for Enhanced Spatial Analysis",
+    "section": "",
+    "text": "When users create a farm, they can set the farm’s location by providing an address, entering coordinates, or dropping a pin on the map. However, during the mapping workflow, users might draw the farm map (fields, gardens, etc.) in separate or multiple locations. This discrepancy can lead to significant differences between the initially set location and the actual mapped areas.\nWe observed instances where the centroid calculated from mapped areas and the user-provided location differed by over 25 km. While this does not indicate fraudulent farm entries, it highlights cases where multiple significant locations (e.g., fields, gardens) were grouped under one farm name and farm ID.\nThese discrepancies can impact spatial analyses, such as identifying the closest metropolitan area to a farm, evaluating farm diversity, or assessing environmental influences."
+  },
+  {
+    "objectID": "posts/identifying_outliers/farm_centroid_outliers.html#implementation-strategy",
+    "href": "posts/identifying_outliers/farm_centroid_outliers.html#implementation-strategy",
+    "title": "Calculating Farm Area and Centroid for Enhanced Spatial Analysis",
+    "section": "",
+    "text": "We utilized the following data sources:\n\nFarm Data: General information about the farm, including user-inputted grid points.\nMapped Areas: Polygon data representing fields, gardens, and other regions within the farm.\nLocation Data: Associated coordinates of mapped farm areas.\n\n\n\n\n\nParse Coordinates:\n\nConvert any string representations of coordinates into a structured list for further analysis.\n\nCompute Centroid:\n\nCalculate the centroid for areas marked as “Farm Site Boundary” if available.\nIf no “Farm Site Boundary” exists, aggregate coordinates from all mapped areas (e.g., fields, gardens) to compute a cumulative centroid.\n\nDistance Analysis:\n\nCompare the centroid of the mapped areas with the initial user-provided location (grid_points).\nCalculate distances between these two points using geospatial methods and classify farms based on proximity:\n\nWithin 500m, 1km, 5km, 10km, and 15km.\nBeyond 15km and 25km.\n\n\nData Output:\n\nGenerate a refined dataset containing the farm ID, centroid coordinates, user-provided grid points, and calculated distances."
+  },
+  {
+    "objectID": "posts/identifying_outliers/farm_centroid_outliers.html#key-observations",
+    "href": "posts/identifying_outliers/farm_centroid_outliers.html#key-observations",
+    "title": "Calculating Farm Area and Centroid for Enhanced Spatial Analysis",
+    "section": "",
+    "text": "Centroid Discrepancy:\n\nSome farms showed centroid-to-user-location distances exceeding 25 km.\nThis indicates that users grouped multiple separate significant areas under a single farm ID.\n\nOutlier Farms:\n\nFarms with large discrepancies between their centroid and user-provided locations were flagged as outliers.\nThese farms are not considered fraudulent but represent unique cases with dispersed mapped areas."
+  },
+  {
+    "objectID": "posts/identifying_outliers/farm_centroid_outliers.html#benefits-of-this-strategy",
+    "href": "posts/identifying_outliers/farm_centroid_outliers.html#benefits-of-this-strategy",
+    "title": "Calculating Farm Area and Centroid for Enhanced Spatial Analysis",
+    "section": "",
+    "text": "Improved Spatial Accuracy:\n\nAllows for precise identification of farm locations based on actual mapped areas.\n\nFlexible Analysis Options:\n\nEnables researchers to select either user-provided coordinates or computed centroids, depending on the analysis.\n\nEnhanced Data Integrity:\n\nHighlights outlier cases for further review, ensuring better understanding of farm spatial distributions."
+  },
+  {
+    "objectID": "posts/identifying_outliers/farm_centroid_outliers.html#considerations",
+    "href": "posts/identifying_outliers/farm_centroid_outliers.html#considerations",
+    "title": "Calculating Farm Area and Centroid for Enhanced Spatial Analysis",
+    "section": "",
+    "text": "Data Quality:\n\nRelies on accurate user mappings. Errors in mapped data can affect the centroid calculations.\n\nOutlier Handling:\n\nOutlier farms may require manual review for specific analyses.\n\nComputational Resources:\n\nHandling large datasets with complex geometries may require significant computational power."
+  },
+  {
+    "objectID": "posts/identifying_outliers/farm_centroid_outliers.html#conclusion",
+    "href": "posts/identifying_outliers/farm_centroid_outliers.html#conclusion",
+    "title": "Calculating Farm Area and Centroid for Enhanced Spatial Analysis",
+    "section": "",
+    "text": "This approach reconciles differences between initial farm locations and actual mapped areas, providing a comprehensive spatial representation of farms. While outlier farms with significant centroid-to-user-location discrepancies are noted, they are still valid entries, representing unique spatial distributions. This refined spatial data improves the accuracy and reliability of analyses involving farm proximity, urban interactions, and geographical diversity."
+  },
+  {
+    "objectID": "posts/identifying_fake_farms/filter_farm_names.html",
+    "href": "posts/identifying_fake_farms/filter_farm_names.html",
+    "title": "Filtering Out Invalid Farm Names (SQL)",
+    "section": "",
+    "text": "In the process of validating farm data, it’s crucial to ensure that the dataset contains only genuine entries. A lot of the times, farmers and new users, make demo farms when testing the app. Invalid or placeholder farm names can skew analyses and lead to inaccurate conclusions. One effective strategy to enhance data quality is filtering out farms with names that are likely placeholders or test entries.\n\n\nDuring data collection, especially in systems undergoing testing or user onboarding, it’s common to encounter farm names that are not real. These may include default names, test entries, or placeholders like “Test Farm,” “Demo,” or “ABC.” Including such entries in data analyses can distort results and insights.\n\n\n\nTo remove farms with invalid names, We utilize the following SQL query. This query filters out entries where the farm_name contains any of the specified substrings indicative of a test or placeholder name.\nWHERE LOWER(f.farm_name) LIKE '%fake%'\n   OR LOWER(f.farm_name) LIKE '%prueba%'\n   OR LOWER(f.farm_name) LIKE '%test%'\n   OR LOWER(f.farm_name) LIKE '%abc%'\n   OR LOWER(f.farm_name) LIKE '%123%'\n   OR LOWER(f.farm_name) LIKE '%hola%'\n   OR LOWER(f.farm_name) LIKE '%sample%'\n   OR LOWER(f.farm_name) LIKE '%demo%'\n   OR LOWER(f.farm_name) LIKE '%delete%'\n   OR LOWER(f.farm_name) LIKE '%none%'\n   OR LOWER(f.farm_name) LIKE '%dummy%'\n   OR LOWER(f.farm_name) LIKE '%wrong%'\n   OR LOWER(f.farm_name) LIKE '%not real%'\n   OR LOWER(f.farm_name) LIKE '%litefarm%'\n   OR LOWER(f.farm_name) LIKE 'ab'\n   OR LOWER(f.farm_name) LIKE '%n/a%'\n\n\n\nfake, test, sample, demo, dummy, not real: Commonly used in testing environments to denote non-real entries.\nprueba: Spanish for “test,” capturing non-English placeholder names.\nabc, 123, ab: Generic placeholders often used when real data isn’t available.\nhola: Spanish for “hello,” possibly used as a default or test entry.\ndelete, none, n/a: Entries that may have been marked for deletion or indicate missing data.\nwrong: Indicates an incorrect or placeholder entry.\nLitefarm: Might be used as a default name within the system or during demonstrations.\n\nThe LOWER() function ensures the query is case-insensitive, capturing variations like “Test” and “test.”\n\n\n\n\n\nImproved Data Quality: Eliminates non-genuine entries, leading to more accurate analyses.\nEfficiency: Reduces the noise in the dataset, making data processing and analysis more efficient.\nReliability: Enhances the trustworthiness of insights derived from the data.\n\n\n\n\nWhile this strategy is effective, it’s important to be mindful of potential false positives. For example, a legitimate farm named “ABC Ranch” would be excluded. Regularly reviewing and updating the list of filtered keywords can mitigate this risk.\n\n\n\nFiltering out invalid farm names is a simple yet powerful strategy to improve data validation. By implementing this SQL query, we ensure that our dataset reflects real-world entries, enhancing the overall quality and reliability of our analyses."
+  },
+  {
+    "objectID": "posts/identifying_fake_farms/filter_farm_names.html#rationale",
+    "href": "posts/identifying_fake_farms/filter_farm_names.html#rationale",
+    "title": "Filtering Out Invalid Farm Names (SQL)",
+    "section": "",
+    "text": "During data collection, especially in systems undergoing testing or user onboarding, it’s common to encounter farm names that are not real. These may include default names, test entries, or placeholders like “Test Farm,” “Demo,” or “ABC.” Including such entries in data analyses can distort results and insights."
+  },
+  {
+    "objectID": "posts/identifying_fake_farms/filter_farm_names.html#implementation-using-sql",
+    "href": "posts/identifying_fake_farms/filter_farm_names.html#implementation-using-sql",
+    "title": "Filtering Out Invalid Farm Names (SQL)",
+    "section": "",
+    "text": "To remove farms with invalid names, We utilize the following SQL query. This query filters out entries where the farm_name contains any of the specified substrings indicative of a test or placeholder name.\nWHERE LOWER(f.farm_name) LIKE '%fake%'\n   OR LOWER(f.farm_name) LIKE '%prueba%'\n   OR LOWER(f.farm_name) LIKE '%test%'\n   OR LOWER(f.farm_name) LIKE '%abc%'\n   OR LOWER(f.farm_name) LIKE '%123%'\n   OR LOWER(f.farm_name) LIKE '%hola%'\n   OR LOWER(f.farm_name) LIKE '%sample%'\n   OR LOWER(f.farm_name) LIKE '%demo%'\n   OR LOWER(f.farm_name) LIKE '%delete%'\n   OR LOWER(f.farm_name) LIKE '%none%'\n   OR LOWER(f.farm_name) LIKE '%dummy%'\n   OR LOWER(f.farm_name) LIKE '%wrong%'\n   OR LOWER(f.farm_name) LIKE '%not real%'\n   OR LOWER(f.farm_name) LIKE '%litefarm%'\n   OR LOWER(f.farm_name) LIKE 'ab'\n   OR LOWER(f.farm_name) LIKE '%n/a%'\n\n\n\nfake, test, sample, demo, dummy, not real: Commonly used in testing environments to denote non-real entries.\nprueba: Spanish for “test,” capturing non-English placeholder names.\nabc, 123, ab: Generic placeholders often used when real data isn’t available.\nhola: Spanish for “hello,” possibly used as a default or test entry.\ndelete, none, n/a: Entries that may have been marked for deletion or indicate missing data.\nwrong: Indicates an incorrect or placeholder entry.\nLitefarm: Might be used as a default name within the system or during demonstrations.\n\nThe LOWER() function ensures the query is case-insensitive, capturing variations like “Test” and “test.”"
+  },
+  {
+    "objectID": "posts/identifying_fake_farms/filter_farm_names.html#benefits-of-this-strategy",
+    "href": "posts/identifying_fake_farms/filter_farm_names.html#benefits-of-this-strategy",
+    "title": "Filtering Out Invalid Farm Names (SQL)",
+    "section": "",
+    "text": "Improved Data Quality: Eliminates non-genuine entries, leading to more accurate analyses.\nEfficiency: Reduces the noise in the dataset, making data processing and analysis more efficient.\nReliability: Enhances the trustworthiness of insights derived from the data."
+  },
+  {
+    "objectID": "posts/identifying_fake_farms/filter_farm_names.html#considerations",
+    "href": "posts/identifying_fake_farms/filter_farm_names.html#considerations",
+    "title": "Filtering Out Invalid Farm Names (SQL)",
+    "section": "",
+    "text": "While this strategy is effective, it’s important to be mindful of potential false positives. For example, a legitimate farm named “ABC Ranch” would be excluded. Regularly reviewing and updating the list of filtered keywords can mitigate this risk."
+  },
+  {
+    "objectID": "posts/identifying_fake_farms/filter_farm_names.html#conclusion",
+    "href": "posts/identifying_fake_farms/filter_farm_names.html#conclusion",
+    "title": "Filtering Out Invalid Farm Names (SQL)",
+    "section": "",
+    "text": "Filtering out invalid farm names is a simple yet powerful strategy to improve data validation. By implementing this SQL query, we ensure that our dataset reflects real-world entries, enhancing the overall quality and reliability of our analyses."
+  },
+  {
     "objectID": "posts/identifying_fake_farms/filter_emails.html",
     "href": "posts/identifying_fake_farms/filter_emails.html",
     "title": "Filtering Out Farms Associated with Invalid Emails (SQL)",
@@ -91,178 +259,10 @@
     "text": "This approach addresses outliers systematically, ensuring the dataset represents typical trends while minimizing distortions from extreme values. By combining IQR-based filtering, manual thresholds, and advanced statistical methods, we enhanced the quality of the dataset and produced clear, reliable visualizations for analysis. This comprehensive strategy provides a strong foundation for understanding agricultural yields across diverse farm locations and crop groups."
   },
   {
-    "objectID": "posts/identifying_outliers/farm_centroid_outliers.html",
-    "href": "posts/identifying_outliers/farm_centroid_outliers.html",
-    "title": "Calculating Farm Area and Centroid for Enhanced Spatial Analysis",
-    "section": "",
-    "text": "This strategy helps to calculate the total area of farms and determine their precise centroid coordinates. This approach addresses discrepancies between the farm’s initial location and the actual mapped areas within the farm, enhancing the reliability of spatial analyses.\n\n\n\nWhen users create a farm, they can set the farm’s location by providing an address, entering coordinates, or dropping a pin on the map. However, during the mapping workflow, users might draw the farm map (fields, gardens, etc.) in separate or multiple locations. This discrepancy can lead to significant differences between the initially set location and the actual mapped areas.\nWe observed instances where the centroid calculated from mapped areas and the user-provided location differed by over 25 km. While this does not indicate fraudulent farm entries, it highlights cases where multiple significant locations (e.g., fields, gardens) were grouped under one farm name and farm ID.\nThese discrepancies can impact spatial analyses, such as identifying the closest metropolitan area to a farm, evaluating farm diversity, or assessing environmental influences.\n\n\n\n\n\n\nWe utilized the following data sources:\n\nFarm Data: General information about the farm, including user-inputted grid points.\nMapped Areas: Polygon data representing fields, gardens, and other regions within the farm.\nLocation Data: Associated coordinates of mapped farm areas.\n\n\n\n\n\nParse Coordinates:\n\nConvert any string representations of coordinates into a structured list for further analysis.\n\nCompute Centroid:\n\nCalculate the centroid for areas marked as “Farm Site Boundary” if available.\nIf no “Farm Site Boundary” exists, aggregate coordinates from all mapped areas (e.g., fields, gardens) to compute a cumulative centroid.\n\nDistance Analysis:\n\nCompare the centroid of the mapped areas with the initial user-provided location (grid_points).\nCalculate distances between these two points using geospatial methods and classify farms based on proximity:\n\nWithin 500m, 1km, 5km, 10km, and 15km.\nBeyond 15km and 25km.\n\n\nData Output:\n\nGenerate a refined dataset containing the farm ID, centroid coordinates, user-provided grid points, and calculated distances.\n\n\n\n\n\n\n\n\nCentroid Discrepancy:\n\nSome farms showed centroid-to-user-location distances exceeding 25 km.\nThis indicates that users grouped multiple separate significant areas under a single farm ID.\n\nOutlier Farms:\n\nFarms with large discrepancies between their centroid and user-provided locations were flagged as outliers.\nThese farms are not considered fraudulent but represent unique cases with dispersed mapped areas.\n\n\n\n\n\n\n\nImproved Spatial Accuracy:\n\nAllows for precise identification of farm locations based on actual mapped areas.\n\nFlexible Analysis Options:\n\nEnables researchers to select either user-provided coordinates or computed centroids, depending on the analysis.\n\nEnhanced Data Integrity:\n\nHighlights outlier cases for further review, ensuring better understanding of farm spatial distributions.\n\n\n\n\n\n\n\nData Quality:\n\nRelies on accurate user mappings. Errors in mapped data can affect the centroid calculations.\n\nOutlier Handling:\n\nOutlier farms may require manual review for specific analyses.\n\nComputational Resources:\n\nHandling large datasets with complex geometries may require significant computational power.\n\n\n\n\n\n\nThis approach reconciles differences between initial farm locations and actual mapped areas, providing a comprehensive spatial representation of farms. While outlier farms with significant centroid-to-user-location discrepancies are noted, they are still valid entries, representing unique spatial distributions. This refined spatial data improves the accuracy and reliability of analyses involving farm proximity, urban interactions, and geographical diversity."
-  },
-  {
-    "objectID": "posts/identifying_outliers/farm_centroid_outliers.html#rationale",
-    "href": "posts/identifying_outliers/farm_centroid_outliers.html#rationale",
-    "title": "Calculating Farm Area and Centroid for Enhanced Spatial Analysis",
-    "section": "",
-    "text": "When users create a farm, they can set the farm’s location by providing an address, entering coordinates, or dropping a pin on the map. However, during the mapping workflow, users might draw the farm map (fields, gardens, etc.) in separate or multiple locations. This discrepancy can lead to significant differences between the initially set location and the actual mapped areas.\nWe observed instances where the centroid calculated from mapped areas and the user-provided location differed by over 25 km. While this does not indicate fraudulent farm entries, it highlights cases where multiple significant locations (e.g., fields, gardens) were grouped under one farm name and farm ID.\nThese discrepancies can impact spatial analyses, such as identifying the closest metropolitan area to a farm, evaluating farm diversity, or assessing environmental influences."
-  },
-  {
-    "objectID": "posts/identifying_outliers/farm_centroid_outliers.html#implementation-strategy",
-    "href": "posts/identifying_outliers/farm_centroid_outliers.html#implementation-strategy",
-    "title": "Calculating Farm Area and Centroid for Enhanced Spatial Analysis",
-    "section": "",
-    "text": "We utilized the following data sources:\n\nFarm Data: General information about the farm, including user-inputted grid points.\nMapped Areas: Polygon data representing fields, gardens, and other regions within the farm.\nLocation Data: Associated coordinates of mapped farm areas.\n\n\n\n\n\nParse Coordinates:\n\nConvert any string representations of coordinates into a structured list for further analysis.\n\nCompute Centroid:\n\nCalculate the centroid for areas marked as “Farm Site Boundary” if available.\nIf no “Farm Site Boundary” exists, aggregate coordinates from all mapped areas (e.g., fields, gardens) to compute a cumulative centroid.\n\nDistance Analysis:\n\nCompare the centroid of the mapped areas with the initial user-provided location (grid_points).\nCalculate distances between these two points using geospatial methods and classify farms based on proximity:\n\nWithin 500m, 1km, 5km, 10km, and 15km.\nBeyond 15km and 25km.\n\n\nData Output:\n\nGenerate a refined dataset containing the farm ID, centroid coordinates, user-provided grid points, and calculated distances."
-  },
-  {
-    "objectID": "posts/identifying_outliers/farm_centroid_outliers.html#key-observations",
-    "href": "posts/identifying_outliers/farm_centroid_outliers.html#key-observations",
-    "title": "Calculating Farm Area and Centroid for Enhanced Spatial Analysis",
-    "section": "",
-    "text": "Centroid Discrepancy:\n\nSome farms showed centroid-to-user-location distances exceeding 25 km.\nThis indicates that users grouped multiple separate significant areas under a single farm ID.\n\nOutlier Farms:\n\nFarms with large discrepancies between their centroid and user-provided locations were flagged as outliers.\nThese farms are not considered fraudulent but represent unique cases with dispersed mapped areas."
-  },
-  {
-    "objectID": "posts/identifying_outliers/farm_centroid_outliers.html#benefits-of-this-strategy",
-    "href": "posts/identifying_outliers/farm_centroid_outliers.html#benefits-of-this-strategy",
-    "title": "Calculating Farm Area and Centroid for Enhanced Spatial Analysis",
-    "section": "",
-    "text": "Improved Spatial Accuracy:\n\nAllows for precise identification of farm locations based on actual mapped areas.\n\nFlexible Analysis Options:\n\nEnables researchers to select either user-provided coordinates or computed centroids, depending on the analysis.\n\nEnhanced Data Integrity:\n\nHighlights outlier cases for further review, ensuring better understanding of farm spatial distributions."
-  },
-  {
-    "objectID": "posts/identifying_outliers/farm_centroid_outliers.html#considerations",
-    "href": "posts/identifying_outliers/farm_centroid_outliers.html#considerations",
-    "title": "Calculating Farm Area and Centroid for Enhanced Spatial Analysis",
-    "section": "",
-    "text": "Data Quality:\n\nRelies on accurate user mappings. Errors in mapped data can affect the centroid calculations.\n\nOutlier Handling:\n\nOutlier farms may require manual review for specific analyses.\n\nComputational Resources:\n\nHandling large datasets with complex geometries may require significant computational power."
-  },
-  {
-    "objectID": "posts/identifying_outliers/farm_centroid_outliers.html#conclusion",
-    "href": "posts/identifying_outliers/farm_centroid_outliers.html#conclusion",
-    "title": "Calculating Farm Area and Centroid for Enhanced Spatial Analysis",
-    "section": "",
-    "text": "This approach reconciles differences between initial farm locations and actual mapped areas, providing a comprehensive spatial representation of farms. While outlier farms with significant centroid-to-user-location discrepancies are noted, they are still valid entries, representing unique spatial distributions. This refined spatial data improves the accuracy and reliability of analyses involving farm proximity, urban interactions, and geographical diversity."
-  },
-  {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About This Project",
-    "section": "",
-    "text": "About the Farm Validation Project\nThe Farm Validation Project aims to: - Detect invalid or fake farms using advanced validation techniques. - Remove outliers to ensure unbiased and interpretable data visualizations.\nThis project is part of our initiative to create reliable datasets for decision-making and analytics.\nFor more information, visit the GitHub repository."
-  },
-  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Farm Validation Documentation",
     "section": "",
     "text": "Welcome to Farm Validation Documentation\nThis website provides detailed insights into the process of cleaning, validating, and analyzing farm-related data. Learn more about: - Identifying Fake Farms: Techniques to detect invalid or fake farm data. - Outlier Detection and Removal: Strategies to ensure clean and interpretable data for accurate results.\nNavigate through the sections to explore the methodologies and documentation for each step.\nAbout This Project"
-  },
-  {
-    "objectID": "posts/identifying_outliers/farm_on_land_or_water_outlier.html",
-    "href": "posts/identifying_outliers/farm_on_land_or_water_outlier.html",
-    "title": "Identifying Farms on Land or Ocean",
-    "section": "",
-    "text": "This methodology was implemented to classify farms as being located on land or in the ocean based on their geographic coordinates. This classification aimed to improve the accuracy and reliability of spatial analyses by identifying potential outliers (e.g., farms with invalid locations).\n\n\n\nIn the LiteFarm database, some farms have geographic coordinates that place them in unexpected locations, such as oceans or water bodies. While some of these farms are valid (e.g., located on small islands or near coastal boundaries), others may be due to data entry errors or inaccuracies in the mapping process. By identifying and classifying such farms, we aim to:\n\nEnsure data reliability for spatial and environmental analyses.\nExclude invalid farms to avoid skewed results.\nHighlight farms near coastlines or on small islands as potential outliers for manual review.\n\n\n\n\n\n\n\n\nThe farm data was extracted from the LiteFarm database using an SQL query.\nFilters were applied to exclude test farms and known “fake” farms, ensuring only genuine records were analyzed.\nKey attributes included:\n\nfarm_id: Unique identifier for each farm.\nfarm_name: Name of the farm.\ncountry_name: Country where the farm is located.\ngrid_points: Latitude and longitude coordinates representing the farm’s location.\n\n\n\n\n\n\nThe Natural Earth 10m Land Dataset (ne_10m_land.shp) was used for high-resolution land boundary data.\nUsing the geopandas library, the following steps were performed:\n\nPoint-in-Polygon Check: Each farm’s grid_points were converted into geographic points. These points were tested against the land polygons to determine if they fall within a land boundary.\nClassification: Farms were labeled as:\n\n“Land”: If the point fell inside a land polygon.\n“Ocean”: If the point fell outside all land polygons.\n\n\n\n\n\n\n\nA buffer of 1000 meters was added around each farm’s point to account for:\n\nMinor inaccuracies in land boundary data.\nLimited precision in geographic coordinates.\n\nIf the buffered point intersected a land polygon, the farm was classified as “Land”; otherwise, it was classified as “Ocean”.\n\n\n\n\n\nFarms labeled as “Ocean” were flagged as potential outliers.\nThese farms were compiled into a separate dataset for further inspection, as their locations were not expected to represent valid farm locations.\n\n\n\n\n\nThe flagged farms were manually inspected using the Farm Explorer tab on the LiteFarm dashboard to verify their actual locations.\nFarms that appeared to be valid (e.g., located on small islands or very close to the coast) were confirmed as legitimate but still classified as outliers due to:\n\nTheir small size or unusual location.\nPotential for producing skewed results in broader analyses.\n\n\n\n\n\n\nFarms confirmed to lie in the ocean (i.e., invalid farms) were excluded from the dataset by adding their farm_id values to an exclusion list in the SQL query.\nThis updated query ensures that all subsequent analyses and operations exclude invalid farms, improving the reliability of the dataset.\n\n\n\n\n\n\n\nLand Farms:\n\nFarms that fell within land polygons or whose buffered points intersected land boundaries.\n\nOcean Farms:\n\nFarms that fell outside land polygons and could not be confirmed as valid locations through manual inspection.\n\n\n\n\n\n\n\nValid Farms in the Ocean:\n\nSome farms initially classified as “Ocean” were located on small islands or near coastal boundaries.\nThese farms were valid but flagged as outliers due to their geographic characteristics.\n\nImpact on Analyses:\n\nExcluding farms classified as “Ocean” ensures cleaner and more reliable data for spatial analyses.\nHowever, valid farms near coastlines or on small islands may require separate consideration for specific analyses.\n\nOutliers:\n\nFarms in unusual locations (e.g., small islands or coastal areas) may produce skewed results in broader spatial analyses, especially when analyzing trends by proximity to metropolitan areas or landmass sizes.\n\n\n\n\n\n\n\nImproved Data Integrity:\n\nEnsures only valid farms are included in the dataset.\n\nAccurate Spatial Analysis:\n\nDistinguishes between farms on land and those in unexpected locations, improving analysis reliability.\n\nIdentifies Edge Cases:\n\nHighlights farms near coastlines or on small islands for manual inspection and further analysis.\n\n\n\n\n\n\n\nCoastal Farms:\n\nFarms near coastlines or on small islands are valid but may require separate handling in analyses.\n\nBoundary Precision:\n\nThe resolution of the land boundary dataset and the buffer size can influence classification results.\n\nManual Validation:\n\nWhile effective, manual inspection is time-consuming and may not scale to larger datasets.\n\n\n\n\n\n\nBy classifying farms as being located on land or in the ocean, this methodology enhances the reliability of spatial analyses and identifies outliers for further inspection. Farms near coastlines or on small islands are valid but remain flagged as outliers to ensure data consistency and accuracy in broader analyses. This process ensures cleaner, more reliable data for understanding the spatial characteristics of farms in the LiteFarm dataset."
-  },
-  {
-    "objectID": "posts/identifying_outliers/farm_on_land_or_water_outlier.html#rationale",
-    "href": "posts/identifying_outliers/farm_on_land_or_water_outlier.html#rationale",
-    "title": "Identifying Farms on Land or Ocean",
-    "section": "",
-    "text": "In the LiteFarm database, some farms have geographic coordinates that place them in unexpected locations, such as oceans or water bodies. While some of these farms are valid (e.g., located on small islands or near coastal boundaries), others may be due to data entry errors or inaccuracies in the mapping process. By identifying and classifying such farms, we aim to:\n\nEnsure data reliability for spatial and environmental analyses.\nExclude invalid farms to avoid skewed results.\nHighlight farms near coastlines or on small islands as potential outliers for manual review."
-  },
-  {
-    "objectID": "posts/identifying_outliers/farm_on_land_or_water_outlier.html#methodology",
-    "href": "posts/identifying_outliers/farm_on_land_or_water_outlier.html#methodology",
-    "title": "Identifying Farms on Land or Ocean",
-    "section": "",
-    "text": "The farm data was extracted from the LiteFarm database using an SQL query.\nFilters were applied to exclude test farms and known “fake” farms, ensuring only genuine records were analyzed.\nKey attributes included:\n\nfarm_id: Unique identifier for each farm.\nfarm_name: Name of the farm.\ncountry_name: Country where the farm is located.\ngrid_points: Latitude and longitude coordinates representing the farm’s location.\n\n\n\n\n\n\nThe Natural Earth 10m Land Dataset (ne_10m_land.shp) was used for high-resolution land boundary data.\nUsing the geopandas library, the following steps were performed:\n\nPoint-in-Polygon Check: Each farm’s grid_points were converted into geographic points. These points were tested against the land polygons to determine if they fall within a land boundary.\nClassification: Farms were labeled as:\n\n“Land”: If the point fell inside a land polygon.\n“Ocean”: If the point fell outside all land polygons.\n\n\n\n\n\n\n\nA buffer of 1000 meters was added around each farm’s point to account for:\n\nMinor inaccuracies in land boundary data.\nLimited precision in geographic coordinates.\n\nIf the buffered point intersected a land polygon, the farm was classified as “Land”; otherwise, it was classified as “Ocean”.\n\n\n\n\n\nFarms labeled as “Ocean” were flagged as potential outliers.\nThese farms were compiled into a separate dataset for further inspection, as their locations were not expected to represent valid farm locations.\n\n\n\n\n\nThe flagged farms were manually inspected using the Farm Explorer tab on the LiteFarm dashboard to verify their actual locations.\nFarms that appeared to be valid (e.g., located on small islands or very close to the coast) were confirmed as legitimate but still classified as outliers due to:\n\nTheir small size or unusual location.\nPotential for producing skewed results in broader analyses.\n\n\n\n\n\n\nFarms confirmed to lie in the ocean (i.e., invalid farms) were excluded from the dataset by adding their farm_id values to an exclusion list in the SQL query.\nThis updated query ensures that all subsequent analyses and operations exclude invalid farms, improving the reliability of the dataset."
-  },
-  {
-    "objectID": "posts/identifying_outliers/farm_on_land_or_water_outlier.html#classification-results",
-    "href": "posts/identifying_outliers/farm_on_land_or_water_outlier.html#classification-results",
-    "title": "Identifying Farms on Land or Ocean",
-    "section": "",
-    "text": "Land Farms:\n\nFarms that fell within land polygons or whose buffered points intersected land boundaries.\n\nOcean Farms:\n\nFarms that fell outside land polygons and could not be confirmed as valid locations through manual inspection."
-  },
-  {
-    "objectID": "posts/identifying_outliers/farm_on_land_or_water_outlier.html#key-observations",
-    "href": "posts/identifying_outliers/farm_on_land_or_water_outlier.html#key-observations",
-    "title": "Identifying Farms on Land or Ocean",
-    "section": "",
-    "text": "Valid Farms in the Ocean:\n\nSome farms initially classified as “Ocean” were located on small islands or near coastal boundaries.\nThese farms were valid but flagged as outliers due to their geographic characteristics.\n\nImpact on Analyses:\n\nExcluding farms classified as “Ocean” ensures cleaner and more reliable data for spatial analyses.\nHowever, valid farms near coastlines or on small islands may require separate consideration for specific analyses.\n\nOutliers:\n\nFarms in unusual locations (e.g., small islands or coastal areas) may produce skewed results in broader spatial analyses, especially when analyzing trends by proximity to metropolitan areas or landmass sizes."
-  },
-  {
-    "objectID": "posts/identifying_outliers/farm_on_land_or_water_outlier.html#benefits-of-this-approach",
-    "href": "posts/identifying_outliers/farm_on_land_or_water_outlier.html#benefits-of-this-approach",
-    "title": "Identifying Farms on Land or Ocean",
-    "section": "",
-    "text": "Improved Data Integrity:\n\nEnsures only valid farms are included in the dataset.\n\nAccurate Spatial Analysis:\n\nDistinguishes between farms on land and those in unexpected locations, improving analysis reliability.\n\nIdentifies Edge Cases:\n\nHighlights farms near coastlines or on small islands for manual inspection and further analysis."
-  },
-  {
-    "objectID": "posts/identifying_outliers/farm_on_land_or_water_outlier.html#considerations",
-    "href": "posts/identifying_outliers/farm_on_land_or_water_outlier.html#considerations",
-    "title": "Identifying Farms on Land or Ocean",
-    "section": "",
-    "text": "Coastal Farms:\n\nFarms near coastlines or on small islands are valid but may require separate handling in analyses.\n\nBoundary Precision:\n\nThe resolution of the land boundary dataset and the buffer size can influence classification results.\n\nManual Validation:\n\nWhile effective, manual inspection is time-consuming and may not scale to larger datasets."
-  },
-  {
-    "objectID": "posts/identifying_outliers/farm_on_land_or_water_outlier.html#conclusion",
-    "href": "posts/identifying_outliers/farm_on_land_or_water_outlier.html#conclusion",
-    "title": "Identifying Farms on Land or Ocean",
-    "section": "",
-    "text": "By classifying farms as being located on land or in the ocean, this methodology enhances the reliability of spatial analyses and identifies outliers for further inspection. Farms near coastlines or on small islands are valid but remain flagged as outliers to ensure data consistency and accuracy in broader analyses. This process ensures cleaner, more reliable data for understanding the spatial characteristics of farms in the LiteFarm dataset."
-  },
-  {
-    "objectID": "posts/identifying_outliers/dashboard_visualizations_data_cleaning.html",
-    "href": "posts/identifying_outliers/dashboard_visualizations_data_cleaning.html",
-    "title": "Data Cleaning for Dashboard Visualizations",
-    "section": "",
-    "text": "When generating dashboard visualizations for numerical variables—such as farm_site_area, productive_area, natural_area, and others—we apply consistent outlier filtering to ensure accurate and insightful displays. This process uses the Interquartile Range (IQR) method and dynamically adapts based on the selected country and time range.\n\n\n\nWhen generating dashboard visualizations involving area-related variables—such as farm_site_area, productive_area, crop_management_tasks and similar metrics—we apply dynamic outlier filtering based on country and date range. This ensures users receive clean, representative data even in visual summaries.\n\n\n\n\n\n\nBefore plotting, we filter the data based on the selected country and date range.\n\n\n\n\nFor each selected country, we calculate the Interquartile Range (IQR) specific to the filtered dataset.\nQ1 and Q3 are recalculated for the relevant numerical variables.\n\n\n\n\n\nLower Bound = max(Q1 − 1.5 × IQR, 0)\nUpper Bound = Q3 + 1.5 × IQR\n\n\n\n\nOnly farms with values within these dynamically calculated IQR limits are included. This ensures the visualization is not skewed by outliers while preserving as much natural variability as possible.\n\n\n\n\nIf the user selects India and a time range of 2022-01-01 to 2023-01-01, the system:\n\nFilters farms created in India during that period.\nComputes the IQR-based bounds for productive_area.\nUses only values within those bounds to generate histograms or summary plots.\n\n\n\n\n\n\n\nImproved Data Quality: Removes inconsistent and extreme values while preserving valid variability.\nCountry-Specific Analysis: Tailored limits for each country and location type ensure cultural and geographical context is respected.\nEnhanced Visualizations: Clearer trends and relationships after outlier removal."
-  },
-  {
-    "objectID": "posts/identifying_outliers/dashboard_visualizations_data_cleaning.html#benefits-of-this-strategy",
-    "href": "posts/identifying_outliers/dashboard_visualizations_data_cleaning.html#benefits-of-this-strategy",
-    "title": "Data Cleaning for Dashboard Visualizations",
-    "section": "",
-    "text": "Improved Data Quality: Removes inconsistent and extreme values while preserving valid variability.\nCountry-Specific Analysis: Tailored limits for each country and location type ensure cultural and geographical context is respected.\nEnhanced Visualizations: Clearer trends and relationships after outlier removal."
-  },
-  {
-    "objectID": "posts/identifying_fake_farms/filter_farm_names.html",
-    "href": "posts/identifying_fake_farms/filter_farm_names.html",
-    "title": "Filtering Out Invalid Farm Names (SQL)",
-    "section": "",
-    "text": "In the process of validating farm data, it’s crucial to ensure that the dataset contains only genuine entries. A lot of the times, farmers and new users, make demo farms when testing the app. Invalid or placeholder farm names can skew analyses and lead to inaccurate conclusions. One effective strategy to enhance data quality is filtering out farms with names that are likely placeholders or test entries.\n\n\nDuring data collection, especially in systems undergoing testing or user onboarding, it’s common to encounter farm names that are not real. These may include default names, test entries, or placeholders like “Test Farm,” “Demo,” or “ABC.” Including such entries in data analyses can distort results and insights.\n\n\n\nTo remove farms with invalid names, We utilize the following SQL query. This query filters out entries where the farm_name contains any of the specified substrings indicative of a test or placeholder name.\nWHERE LOWER(f.farm_name) LIKE '%fake%'\n   OR LOWER(f.farm_name) LIKE '%prueba%'\n   OR LOWER(f.farm_name) LIKE '%test%'\n   OR LOWER(f.farm_name) LIKE '%abc%'\n   OR LOWER(f.farm_name) LIKE '%123%'\n   OR LOWER(f.farm_name) LIKE '%hola%'\n   OR LOWER(f.farm_name) LIKE '%sample%'\n   OR LOWER(f.farm_name) LIKE '%demo%'\n   OR LOWER(f.farm_name) LIKE '%delete%'\n   OR LOWER(f.farm_name) LIKE '%none%'\n   OR LOWER(f.farm_name) LIKE '%dummy%'\n   OR LOWER(f.farm_name) LIKE '%wrong%'\n   OR LOWER(f.farm_name) LIKE '%not real%'\n   OR LOWER(f.farm_name) LIKE '%litefarm%'\n   OR LOWER(f.farm_name) LIKE 'ab'\n   OR LOWER(f.farm_name) LIKE '%n/a%'\n\n\n\nfake, test, sample, demo, dummy, not real: Commonly used in testing environments to denote non-real entries.\nprueba: Spanish for “test,” capturing non-English placeholder names.\nabc, 123, ab: Generic placeholders often used when real data isn’t available.\nhola: Spanish for “hello,” possibly used as a default or test entry.\ndelete, none, n/a: Entries that may have been marked for deletion or indicate missing data.\nwrong: Indicates an incorrect or placeholder entry.\nLitefarm: Might be used as a default name within the system or during demonstrations.\n\nThe LOWER() function ensures the query is case-insensitive, capturing variations like “Test” and “test.”\n\n\n\n\n\nImproved Data Quality: Eliminates non-genuine entries, leading to more accurate analyses.\nEfficiency: Reduces the noise in the dataset, making data processing and analysis more efficient.\nReliability: Enhances the trustworthiness of insights derived from the data.\n\n\n\n\nWhile this strategy is effective, it’s important to be mindful of potential false positives. For example, a legitimate farm named “ABC Ranch” would be excluded. Regularly reviewing and updating the list of filtered keywords can mitigate this risk.\n\n\n\nFiltering out invalid farm names is a simple yet powerful strategy to improve data validation. By implementing this SQL query, we ensure that our dataset reflects real-world entries, enhancing the overall quality and reliability of our analyses."
-  },
-  {
-    "objectID": "posts/identifying_fake_farms/filter_farm_names.html#rationale",
-    "href": "posts/identifying_fake_farms/filter_farm_names.html#rationale",
-    "title": "Filtering Out Invalid Farm Names (SQL)",
-    "section": "",
-    "text": "During data collection, especially in systems undergoing testing or user onboarding, it’s common to encounter farm names that are not real. These may include default names, test entries, or placeholders like “Test Farm,” “Demo,” or “ABC.” Including such entries in data analyses can distort results and insights."
-  },
-  {
-    "objectID": "posts/identifying_fake_farms/filter_farm_names.html#implementation-using-sql",
-    "href": "posts/identifying_fake_farms/filter_farm_names.html#implementation-using-sql",
-    "title": "Filtering Out Invalid Farm Names (SQL)",
-    "section": "",
-    "text": "To remove farms with invalid names, We utilize the following SQL query. This query filters out entries where the farm_name contains any of the specified substrings indicative of a test or placeholder name.\nWHERE LOWER(f.farm_name) LIKE '%fake%'\n   OR LOWER(f.farm_name) LIKE '%prueba%'\n   OR LOWER(f.farm_name) LIKE '%test%'\n   OR LOWER(f.farm_name) LIKE '%abc%'\n   OR LOWER(f.farm_name) LIKE '%123%'\n   OR LOWER(f.farm_name) LIKE '%hola%'\n   OR LOWER(f.farm_name) LIKE '%sample%'\n   OR LOWER(f.farm_name) LIKE '%demo%'\n   OR LOWER(f.farm_name) LIKE '%delete%'\n   OR LOWER(f.farm_name) LIKE '%none%'\n   OR LOWER(f.farm_name) LIKE '%dummy%'\n   OR LOWER(f.farm_name) LIKE '%wrong%'\n   OR LOWER(f.farm_name) LIKE '%not real%'\n   OR LOWER(f.farm_name) LIKE '%litefarm%'\n   OR LOWER(f.farm_name) LIKE 'ab'\n   OR LOWER(f.farm_name) LIKE '%n/a%'\n\n\n\nfake, test, sample, demo, dummy, not real: Commonly used in testing environments to denote non-real entries.\nprueba: Spanish for “test,” capturing non-English placeholder names.\nabc, 123, ab: Generic placeholders often used when real data isn’t available.\nhola: Spanish for “hello,” possibly used as a default or test entry.\ndelete, none, n/a: Entries that may have been marked for deletion or indicate missing data.\nwrong: Indicates an incorrect or placeholder entry.\nLitefarm: Might be used as a default name within the system or during demonstrations.\n\nThe LOWER() function ensures the query is case-insensitive, capturing variations like “Test” and “test.”"
-  },
-  {
-    "objectID": "posts/identifying_fake_farms/filter_farm_names.html#benefits-of-this-strategy",
-    "href": "posts/identifying_fake_farms/filter_farm_names.html#benefits-of-this-strategy",
-    "title": "Filtering Out Invalid Farm Names (SQL)",
-    "section": "",
-    "text": "Improved Data Quality: Eliminates non-genuine entries, leading to more accurate analyses.\nEfficiency: Reduces the noise in the dataset, making data processing and analysis more efficient.\nReliability: Enhances the trustworthiness of insights derived from the data."
-  },
-  {
-    "objectID": "posts/identifying_fake_farms/filter_farm_names.html#considerations",
-    "href": "posts/identifying_fake_farms/filter_farm_names.html#considerations",
-    "title": "Filtering Out Invalid Farm Names (SQL)",
-    "section": "",
-    "text": "While this strategy is effective, it’s important to be mindful of potential false positives. For example, a legitimate farm named “ABC Ranch” would be excluded. Regularly reviewing and updating the list of filtered keywords can mitigate this risk."
-  },
-  {
-    "objectID": "posts/identifying_fake_farms/filter_farm_names.html#conclusion",
-    "href": "posts/identifying_fake_farms/filter_farm_names.html#conclusion",
-    "title": "Filtering Out Invalid Farm Names (SQL)",
-    "section": "",
-    "text": "Filtering out invalid farm names is a simple yet powerful strategy to improve data validation. By implementing this SQL query, we ensure that our dataset reflects real-world entries, enhancing the overall quality and reliability of our analyses."
   }
 ]
